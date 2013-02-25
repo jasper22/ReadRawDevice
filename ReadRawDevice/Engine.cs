@@ -65,9 +65,6 @@ namespace ReadRawDevice
         public async Task ExtractVolumeAsync(SystemVolume device, string outputFile, IProgress<int> progress)
         {
             throw new NotImplementedException();
-            //PrepareTokenSource();
-
-            //await Task.Run(() => { });
         }
 
         //public Task<long> ExtractDiskAsync(SystemDevice device, string outputFile, IProgress<int> progress)
@@ -80,7 +77,7 @@ namespace ReadRawDevice
             int bufferSize = sectorsReadAtOnce * device.BytesPerSector;
             //
 
-            // Allign to 512 exactly
+            // Align to 512 exactly
             //while (bufferSize % device.BytesPerSector != 0)
             //    bufferSize--;
 
