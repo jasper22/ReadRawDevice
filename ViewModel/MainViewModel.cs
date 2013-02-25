@@ -239,7 +239,10 @@ namespace ReadRawDevice.Gui.ViewModel
 
         }
 
-
+        /// <summary>
+        /// Gets the name of the output file.
+        /// </summary>
+        /// <returns>If user enter any file the full path and file name will be returned, otherwise string.Empty will be returned</returns>
         protected string GetOutputFileName()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog()
