@@ -8,6 +8,7 @@ using Xunit.Extensions;
 using ReadRawDevice.Core;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Threading;
 
 namespace ReadRawDevice.NUnit
 {
@@ -16,6 +17,7 @@ namespace ReadRawDevice.NUnit
         private ReadRawDevice.Engine engine;
         private VolumesCollection coll = null;
         private DeviceCollection devColl = null;
+        private CancellationTokenSource tokenSource;
 
         public BasicTests()
         {
@@ -36,24 +38,6 @@ namespace ReadRawDevice.NUnit
         }
 
         [Fact]
-        public void allVolumesShouldHaveASize()
-        {
-            //coll.Where(dev => !dev.PartitionLength.HasValue).All(dev => {
-            //    System.Diagnostics.Trace.WriteLine("Device: " + dev.DevicePath + " doesn't have a size");
-            //    return true;
-            //});
-
-            Assert.DoesNotThrow(() =>
-            {
-                var tsk = engine.BuildVolumesAsync();
-                tsk.Wait();
-                coll = tsk.Result;
-            });
-
-            Assert.True(coll.All(dev => !dev.VolumeSize.HasValue));
-        }
-
-        [Fact]
         public void allVolumesShouldHaveDiskSize()
         {
             //coll.Where(dev => !(dev.DiskSize.HasValue && dev.DiskSize.Value >= 0)).All(dev =>
@@ -62,9 +46,11 @@ namespace ReadRawDevice.NUnit
             //    return true;
             //});
 
+            tokenSource = new CancellationTokenSource();
+
             Assert.DoesNotThrow(() =>
             {
-                var tsk = engine.BuildVolumesAsync();
+                var tsk = engine.BuildVolumesAsync(tokenSource.Token);
                 tsk.Wait();
                 coll = tsk.Result;
             });
@@ -75,21 +61,46 @@ namespace ReadRawDevice.NUnit
         [Fact]
         public void enumerateDevicesShouldNotThrow()
         {
+            tokenSource = new CancellationTokenSource();
+
             Assert.DoesNotThrow(() =>
             {
-                var tsk = engine.BuildDevicesAsync();
+                var tsk = engine.BuildDevicesAsync(tokenSource.Token);
                 tsk.Wait();
                 devColl = tsk.Result;
             });
         }
 
         [Fact]
+        public void allDevicesShouldHaveDiskSize()
+        {
+            tokenSource = new CancellationTokenSource();
+
+            Assert.DoesNotThrow(() =>
+            {
+                var tsk = engine.BuildDevicesAsync(tokenSource.Token);
+                tsk.Wait();
+                devColl = tsk.Result;
+            });
+
+            devColl.AsParallel().ForAll(dev => {
+                System.Diagnostics.Trace.WriteLine("Device " + dev.FriendlyName + " size is: " + (dev.DiskSize.HasValue == true ? dev.DiskSize.Value.ToString() : "<empty>"));
+            });
+            
+            var zz = devColl.Where(dev => !(dev.DiskSize.HasValue && dev.DiskSize.Value >= 0));
+
+            Assert.True(zz.Any() == false);
+        }
+
+        [Fact]
         public async void testSaveToFile()
         {
+            tokenSource = new CancellationTokenSource();
+
             //Assert.DoesNotThrow(() =>
             //{
                 //coll = await engine.BuildVolumesAsync();
-            devColl = await engine.BuildDevicesAsync().ConfigureAwait(false); ;
+            devColl = await engine.BuildDevicesAsync(tokenSource.Token).ConfigureAwait(false); ;
             //});
 
             //string fileName = System.IO.Path.GetTempFileName();
@@ -106,7 +117,7 @@ namespace ReadRawDevice.NUnit
 
             System.Diagnostics.Trace.WriteLine("Output file is: " + fileName);
 
-            long bytesRead = await engine.ExtractDiskAsync(device, fileName, progressIndicator);
+            long bytesRead = await engine.ExtractDiskAsync(device, fileName, progressIndicator, tokenSource.Token);
             //tsk2.Wait();
 
             System.Diagnostics.Debug.WriteLine("--- All done ---");

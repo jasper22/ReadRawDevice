@@ -19,7 +19,7 @@ namespace ReadRawDevice.Win32
         /// <param name="deviceInformationData">The device information data.</param>
         /// <param name="property">The property.</param>
         /// <returns>String representation of the property</returns>
-        internal static string GetProperty(SafeFileHandle deviceHandle, SP_DEVINFO_DATA deviceInformationData, SetupDiGetDeviceRegistryPropertyEnum property)
+        internal static string GetProperty(IntPtr deviceHandle, SP_DEVINFO_DATA deviceInformationData, SetupDiGetDeviceRegistryPropertyEnum property)
         {
             bool functionAnswer = false;
             UInt32 propertyRegDataType = 0;
@@ -54,7 +54,7 @@ namespace ReadRawDevice.Win32
             }
             catch (Exception exp_gen)
             {
-                throw new Win32Exception("Could not receive proeprty", exp_gen);
+                throw new Win32Exception("Could not receive property", exp_gen);
             }
             finally
             {

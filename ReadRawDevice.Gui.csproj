@@ -82,10 +82,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\MainModel.cs" />
     <Compile Include="ViewModel\Commands\CommandExit.cs" />
     <Compile Include="ViewModel\Commands\CommandExtract.cs" />
+    <Compile Include="ViewModel\Commands\CommandRefresh.cs" />
+    <Compile Include="ViewModel\Converters\ConvertLongToString.cs" />
     <Compile Include="ViewModel\Localization.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\VisualStateManagerEx.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -124,9 +128,7 @@
       <Name>ReadRawDevice</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Assests\settings.png" />
   </ItemGroup>

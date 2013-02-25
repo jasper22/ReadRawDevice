@@ -19,7 +19,6 @@ namespace ReadRawDevice
         private VolumeBuilder volumeBuilder = null;
         private DeviceBuilder deviceBuilder = null;
         private Reader reader = null;
-        private CancellationTokenSource tokenSource = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Engine"/> class.
@@ -32,47 +31,28 @@ namespace ReadRawDevice
         }
 
         /// <summary>
-        /// Prepares the token source for re-entrance
-        /// </summary>
-        private void PrepareTokenSource()
-        {
-            if (tokenSource != null)
-            {
-                tokenSource.Cancel();
-                tokenSource.Dispose();
-                tokenSource = null;
-            }
-
-            tokenSource = new CancellationTokenSource();
-        }
-
-        /// <summary>
         /// Builds the volumes asynchronously
         /// </summary>
         /// <returns></returns>
-        public Task<VolumesCollection> BuildVolumesAsync()
+        public Task<VolumesCollection> BuildVolumesAsync(CancellationToken token)
         {
-            PrepareTokenSource();
-
             return Task.Factory.StartNew<VolumesCollection>(() =>
             {
-                return volumeBuilder.Build(tokenSource.Token);
-            }, tokenSource.Token);
+                return volumeBuilder.Build(token);
+            }, token);
         }
 
         /// <summary>
         /// Builds the devices asynchronously.
         /// </summary>
         /// <returns></returns>
-        public Task<DeviceCollection> BuildDevicesAsync()
+        public Task<DeviceCollection> BuildDevicesAsync(CancellationToken token)
         {
-            PrepareTokenSource();
-
             return Task.Factory.StartNew<DeviceCollection>(() =>
             {
-                return deviceBuilder.Build(tokenSource.Token);
+                return deviceBuilder.Build(token);
             }
-            , tokenSource.Token);
+            , token);
         }
 
         /// <summary>
@@ -91,11 +71,9 @@ namespace ReadRawDevice
         }
 
         //public Task<long> ExtractDiskAsync(SystemDevice device, string outputFile, IProgress<int> progress)
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions] 
-        public Task<long> ExtractDiskAsync(SystemDevice device, string outputFile, IProgress<int> progress)
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        public Task<long> ExtractDiskAsync(SystemDevice device, string outputFile, IProgress<int> progress, CancellationToken token)
         {
-            PrepareTokenSource();
-
             //
             // If bufferSize will be tooo small (like: 512 bytes) the iteration of ReadFile will fail with E_FAIL or some SEH exception :(
             int sectorsReadAtOnce = Convert.ToInt32(device.SectorsCount / 100) + 1; // in 'sectors' not bytes !
@@ -202,7 +180,7 @@ namespace ReadRawDevice
                     return 0;
                 }
             }
-            , tokenSource.Token);
+            , token);
         }
 
         /// <summary>

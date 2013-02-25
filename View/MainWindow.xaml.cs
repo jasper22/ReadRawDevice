@@ -17,28 +17,7 @@ namespace ReadRawDevice.Gui.View
         public MainWindow()
         {
             InitializeComponent();
-
-            //Init();
         }
-
-        //protected async void Init()
-        //{
-        //    Core.DeviceCollection devColl = await engine.BuildDevicesAsync().ConfigureAwait(false);
-        //    string path = System.IO.Path.Combine(Environment.CurrentDirectory, "diskOutput.bin");
-
-        //    var device = devColl.Where(dev =>
-        //    {
-        //        return (dev.DiskSize.HasValue) && (dev.FriendlyName.Equals("Alex EFI_TEST USB Device"));
-        //    }).First();
-
-        //    IProgress<int> prog = new Progress<int>((val) => {
-        //        System.Diagnostics.Trace.WriteLine("Progress is: " + val.ToString());
-        //    });
-
-        //    long bytesRead = await engine.ExtractDiskAsync(device, path, prog).ConfigureAwait(false);
-
-        //    MessageBox.Show("All done.\nRead: " + bytesRead.ToString() + " bytes");
-        //}
 
         /// <summary>
         /// Handles the event of the Window_MouseDown control.

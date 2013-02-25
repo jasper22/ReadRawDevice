@@ -4,4 +4,5 @@
     <system:String x:Key="WindowTitle">Read device raw</system:String>
     <system:String x:Key="ButtonExitTitle">Exit</system:String>
     <system:String x:Key="ButtonStartTitle">Extract</system:String>
+    <system:String x:Key="ButtonRefreshTitle">Refresh</system:String>
 </ResourceDictionary>

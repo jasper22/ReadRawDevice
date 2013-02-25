@@ -39,7 +39,8 @@ namespace ReadRawDevice
                 SetDeviceSize(dev, token);
                 return true;
             });
-            
+
+            listOfDevices.Count();
 
             return new DeviceCollection(listOfDevices);
         }
@@ -59,8 +60,8 @@ namespace ReadRawDevice
             int flags = (int) (SetupDiGetClassDevsFlags.DIGCF_ALLCLASSES |SetupDiGetClassDevsFlags.DIGCF_DEVICEINTERFACE| SetupDiGetClassDevsFlags.DIGCF_PRESENT);
             Guid aquireGuid = Guid.Empty;
             
-            SafeFileHandle deviceHandle = UnsafeNativeMethods.SetupDiGetClassDevs(ref aquireGuid, IntPtr.Zero, IntPtr.Zero, flags);
-            if (deviceHandle.IsInvalid)
+            IntPtr deviceHandle = UnsafeNativeMethods.SetupDiGetClassDevs(ref aquireGuid, IntPtr.Zero, IntPtr.Zero, flags);
+            if (deviceHandle.ToInt32() == UnsafeNativeMethods.INVALID_HANDLE_VALUE)
             {
                 throw new Win32Exception("Could not execute SetupDi functions", new Win32Exception(Marshal.GetLastWin32Error()));
             }
@@ -146,6 +147,8 @@ namespace ReadRawDevice
                 memberIndex++;
 
             } while (true);
+
+            deviceHandle = IntPtr.Zero;
 
             return listOfDevices;
         }

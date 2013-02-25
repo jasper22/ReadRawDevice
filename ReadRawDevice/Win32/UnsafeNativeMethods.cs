@@ -184,7 +184,8 @@ namespace ReadRawDevice.Win32
         /// </returns>
         /// <remarks>MSDN: http://msdn.microsoft.com/en-us/library/windows/desktop/ms724211(v=vs.85).aspx </remarks>
         [DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Auto, EntryPoint = "CloseHandle")]
-        internal static extern int CloseHandle(IntPtr hObject);
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool CloseHandle(IntPtr hObject);
 
         /// <summary>
         /// Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.
@@ -419,11 +420,12 @@ namespace ReadRawDevice.Win32
         /// DIGCF_PRESENT = Return only devices that are currently present in a system.
         /// DIGCF_PROFILE = Return only devices that are a part of the current hardware profile.</param>
         /// <returns>If the operation succeeds, SetupDiGetClassDevs returns a handle to a device information set that contains all installed devices that matched the supplied parameters. If the operation fails, the function returns INVALID_HANDLE_VALUE. To get extended error information, call GetLastError.</returns>
+        /// <remarks>MSDN: http://msdn.microsoft.com/en-us/library/windows/hardware/ff551069(v=vs.85).aspx </remarks>
         [DllImport("setupapi.dll", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        internal static extern SafeFileHandle SetupDiGetClassDevs(ref Guid ClassGuid,
-                                                                    IntPtr Enumerator,
-                                                                    IntPtr hwndParent,
-                                                                    int Flags);
+        internal static extern IntPtr SetupDiGetClassDevs(ref Guid ClassGuid,
+                                                            IntPtr Enumerator,
+                                                            IntPtr hwndParent,
+                                                            int Flags);
 
         /// <summary>
         /// The SetupDiGetDeviceInterfaceDetail function returns details about a device interface.
@@ -437,7 +439,8 @@ namespace ReadRawDevice.Win32
         /// <param name="deviceInfoData">A pointer to a buffer that receives information about the device that supports the requested interface. The caller must set DeviceInfoData.cbSize to sizeof(SP_DEVINFO_DATA). This parameter is optional and can be NULL.</param>
         /// <returns>SetupDiGetDeviceInterfaceDetail returns TRUE if the function completed without error. If the function completed with an error, FALSE is returned and the error code for the failure can be retrieved by calling GetLastError.</returns>
         [DllImport("setupapi.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern Boolean SetupDiGetDeviceInterfaceDetail(SafeFileHandle hDevInfo,
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern Boolean SetupDiGetDeviceInterfaceDetail(IntPtr hDevInfo,
                                                                        ref SP_DEVICE_INTERFACE_DATA deviceInterfaceData,
                                                                        ref SP_DEVICE_INTERFACE_DETAIL_DATA deviceInterfaceDetailData,
                                                                        UInt32 deviceInterfaceDetailDataSize,
@@ -457,7 +460,7 @@ namespace ReadRawDevice.Win32
         /// <returns></returns>
         [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool SetupDiEnumDeviceInterfaces(SafeFileHandle hDevInfo,
+        internal static extern bool SetupDiEnumDeviceInterfaces(IntPtr hDevInfo,
                                                                     IntPtr devInfo,
                                                                     ref Guid interfaceClassGuid,
                                                                     UInt32 memberIndex,
@@ -470,7 +473,7 @@ namespace ReadRawDevice.Win32
         /// <returns>The function returns TRUE if it is successful. Otherwise, it returns FALSE and the logged error can be retrieved with a call to GetLastError.</returns>
         [DllImport("setupapi.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool SetupDiDestroyDeviceInfoList(SafeFileHandle DeviceInfoSet);
+        internal static extern bool SetupDiDestroyDeviceInfoList(IntPtr DeviceInfoSet);
 
         /// <summary>
         /// The SetupDiGetDeviceRegistryProperty function retrieves the specified device property.
@@ -486,7 +489,7 @@ namespace ReadRawDevice.Win32
         /// <returns>If the function succeeds, the return value is nonzero.</returns>
         [DllImport("setupapi.dll", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool SetupDiGetDeviceRegistryProperty(SafeFileHandle DeviceInfoSet,
+        internal static extern bool SetupDiGetDeviceRegistryProperty(IntPtr DeviceInfoSet,
                                                                     ref SP_DEVINFO_DATA DeviceInfoData,
                                                                     uint Property,
                                                                     out UInt32 PropertyRegDataType,

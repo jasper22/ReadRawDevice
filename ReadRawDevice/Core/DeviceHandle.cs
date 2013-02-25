@@ -3,7 +3,6 @@ namespace ReadRawDevice.Core
 {
     using System;
     using System.ComponentModel;
-    using Microsoft.Win32.SafeHandles;
     using ReadRawDevice.Win32;
 
     /// <summary>
@@ -13,7 +12,7 @@ namespace ReadRawDevice.Core
     {
         private string specialDevicePath;
         private static object lockMe = new object();
-        private Nullable<IntPtr> unsafeHandle = null;
+        private IntPtr unsafeHandle = IntPtr.Zero;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviceHandle"/> class.
@@ -22,6 +21,14 @@ namespace ReadRawDevice.Core
         internal DeviceHandle(string volumeName)
         {
             specialDevicePath = volumeName;
+        }
+
+        /// <summary>
+        /// Finalizes an instance of the <see cref="DeviceHandle"/> class.
+        /// </summary>
+        ~DeviceHandle()
+        {
+            Dispose(false);
         }
 
         /// <summary>
@@ -35,22 +42,15 @@ namespace ReadRawDevice.Core
         /// </exception>
         internal IntPtr OpenDeviceHandle()
         {
-            lock (lockMe)
-            {
-                //
-                // Every call to DeviceIoControl must use new/fresh 'handle' otherwise Exception throws
-                if (unsafeHandle != null)
-                {
-                    // Already open
-                    CloseDeviceHandle();
-                }
-            }
+            //
+            // Every call to DeviceIoControl must use new/fresh 'handle' otherwise Exception throws
+            CloseDeviceHandle();
 
             try
             {
                 lock (lockMe)
                 {
-                    unsafeHandle = null;
+                    unsafeHandle = IntPtr.Zero;
 
                     System.Diagnostics.Trace.WriteLine("[]=== Handle is open for device: " + specialDevicePath);
 
@@ -65,25 +65,18 @@ namespace ReadRawDevice.Core
             }
             catch (Exception exp_gen)
             {
-                lock (lockMe)
-                {
-                    if (unsafeHandle != null)
-                    {
-                        CloseDeviceHandle();
-                    }
-                }
+                CloseDeviceHandle();
 
                 throw new Win32Exception("Could not get access to file/device: " + specialDevicePath, exp_gen);
             }
 
-            if (unsafeHandle.Value.ToInt32() == UnsafeNativeMethods.INVALID_HANDLE_VALUE)
+            if (unsafeHandle.ToInt32() == UnsafeNativeMethods.INVALID_HANDLE_VALUE)
             {
                 CloseDeviceHandle();
                 throw new Win32Exception("Could not get access to file/device: " + specialDevicePath);
             }
 
-            GC.KeepAlive(unsafeHandle);
-            return unsafeHandle.Value;
+            return unsafeHandle;
         }
 
         /// <summary>
@@ -93,14 +86,15 @@ namespace ReadRawDevice.Core
         {
             lock (lockMe)
             {
-                if (unsafeHandle != null)
+                if ((unsafeHandle != IntPtr.Zero) && (unsafeHandle.ToInt32() != UnsafeNativeMethods.INVALID_HANDLE_VALUE))
                 {
                     System.Diagnostics.Trace.WriteLine("CloseDeviceHandle():  Going to close handle for device: " + specialDevicePath);
-                    UnsafeNativeMethods.CloseHandle(unsafeHandle.Value);
+                    bool res = UnsafeNativeMethods.CloseHandle(unsafeHandle);
+                    System.Diagnostics.Trace.WriteLine("CloseDeviceHandle(): " + (res == true ? "success" : "fail"   ));
                 }
             }
 
-            unsafeHandle = null;
+            unsafeHandle = IntPtr.Zero;
         }
 
         /// <summary>
@@ -110,7 +104,6 @@ namespace ReadRawDevice.Core
         {
             System.Diagnostics.Trace.WriteLine("Dispose() was called");
             Dispose(true);
-            GC.SuppressFinalize(unsafeHandle);
             GC.SuppressFinalize(this);
         }
 
@@ -128,14 +121,10 @@ namespace ReadRawDevice.Core
         {
             if (disposing)
             {
-                // Dispose managed resources.
-                if (unsafeHandle != null)
-                {
-                    System.Diagnostics.Trace.WriteLine("Dispose(true) was called and going to close handle for device: " + specialDevicePath);
-                    UnsafeNativeMethods.CloseHandle(unsafeHandle.Value);
-                }
+                // Dispose managed resources
+                CloseDeviceHandle();
 
-                unsafeHandle = null;
+                unsafeHandle = IntPtr.Zero;
             }
             else
             {
