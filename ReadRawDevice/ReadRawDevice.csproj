@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0A5916D8-74BE-4A94-8088-EC6D78B2BFB9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ReadRawDevice</RootNamespace>
+    <AssemblyName>ReadRawDevice</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\DeviceCollection.cs" />
+    <Compile Include="Core\DeviceHandle.cs" />
+    <Compile Include="Core\DevicePartition.cs" />
+    <Compile Include="Core\SystemDevice.cs" />
+    <Compile Include="Core\SystemVolume.cs" />
+    <Compile Include="Core\VolumesCollection.cs" />
+    <Compile Include="DeviceBuilder.cs" />
+    <Compile Include="Engine.cs" />
+    <Compile Include="Reader.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VolumeBuilder.cs" />
+    <Compile Include="Win32\CreationDisposition.cs" />
+    <Compile Include="Win32\DetectionType.cs" />
+    <Compile Include="Win32\DeviceIoControl{T}.cs" />
+    <Compile Include="Win32\DiskDetectionInfo.cs" />
+    <Compile Include="Win32\DiskExInt13Info.cs" />
+    <Compile Include="Win32\DiskExtent.cs" />
+    <Compile Include="Win32\DiskGeometry.cs" />
+    <Compile Include="Win32\DiskGeometryEx.cs" />
+    <Compile Include="Win32\Diskint13Info.cs" />
+    <Compile Include="Win32\DiskInt13Union.cs" />
+    <Compile Include="Win32\DiskPartitionInfo.cs" />
+    <Compile Include="Win32\DiskPartitionType.cs" />
+    <Compile Include="Win32\DriveLayoutInformationEx.cs" />
+    <Compile Include="Win32\DriveLayoutInformationGPT.cs" />
+    <Compile Include="Win32\DriveLayoutInformationMBR.cs" />
+    <Compile Include="Win32\DriveLayoutInformationUnion.cs" />
+    <Compile Include="Win32\FileAccess.cs" />
+    <Compile Include="Win32\FileAttributes.cs" />
+    <Compile Include="Win32\FileDeviceType.cs" />
+    <Compile Include="Win32\FileShare.cs" />
+    <Compile Include="Win32\FileSystemFlags.cs" />
+    <Compile Include="Win32\IoControlCode.cs" />
+    <Compile Include="Win32\IoMethod.cs" />
+    <Compile Include="Win32\MediaType.cs" />
+    <Compile Include="Win32\Native.cs" />
+    <Compile Include="Win32\PartitionInformationEx.cs" />
+    <Compile Include="Win32\PartitionInformationGPT.cs" />
+    <Compile Include="Win32\PartitionInformationMBR.cs" />
+    <Compile Include="Win32\PartitionInformationUnion.cs" />
+    <Compile Include="Win32\PartitionStyle.cs" />
+    <Compile Include="Win32\Priviligies.cs" />
+    <Compile Include="Win32\SetupDiGetClassDevsFlags.cs" />
+    <Compile Include="Win32\SetupDiGetDeviceProperty.cs" />
+    <Compile Include="Win32\SetupDiGetDeviceRegistryPropertyEnum.cs" />
+    <Compile Include="Win32\SetupDiInterfacesGuid.cs" />
+    <Compile Include="Win32\SpDeviceInterfaceData.cs" />
+    <Compile Include="Win32\SpDeviceInterfaceDetailData.cs" />
+    <Compile Include="Win32\SpDevInfoData.cs" />
+    <Compile Include="Win32\StorageDeviceNumber.cs" />
+    <Compile Include="Win32\TokenElevationType.cs" />
+    <Compile Include="Win32\TokenInformationClass.cs" />
+    <Compile Include="Win32\UnsafeNativeMethods.cs" />
+    <Compile Include="Win32\VolumeDiskExtents.cs" />
+    <Compile Include="Win32\Win32Extensions.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
