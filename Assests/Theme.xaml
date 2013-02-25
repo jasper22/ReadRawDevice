@@ -1,0 +1,7 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Color x:Key="MainWindowBackgroundColor">White</Color>
+	<SolidColorBrush x:Key="MainWindowBorderBrush" Color="Black"/>
+	<!-- Resource dictionary entries should be defined here. -->
+</ResourceDictionary>

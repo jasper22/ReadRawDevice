@@ -1,0 +1,7 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <system:String x:Key="WindowTitle">Read device raw</system:String>
+    <system:String x:Key="ButtonExitTitle">Exit</system:String>
+    <system:String x:Key="ButtonStartTitle">Extract</system:String>
+</ResourceDictionary>
