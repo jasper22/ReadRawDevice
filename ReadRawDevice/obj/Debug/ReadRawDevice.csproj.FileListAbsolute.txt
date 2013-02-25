@@ -1,5 +1,0 @@
-C:\Projects\Software\Tools\ReadRawDevice.Gui\ReadRawDevice\bin\Debug\ReadRawDevice.dll
-C:\Projects\Software\Tools\ReadRawDevice.Gui\ReadRawDevice\bin\Debug\ReadRawDevice.pdb
-C:\Projects\Software\Tools\ReadRawDevice.Gui\ReadRawDevice\obj\Debug\ReadRawDevice.dll
-C:\Projects\Software\Tools\ReadRawDevice.Gui\ReadRawDevice\obj\Debug\ReadRawDevice.pdb
-C:\Projects\Software\Tools\ReadRawDevice.Gui\ReadRawDevice\obj\Debug\ReadRawDevice.csprojResolveAssemblyReference.cache
