@@ -2,13 +2,14 @@
 namespace ReadRawDevice.Gui.ViewModel
 {
     using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Windows.Input;
-using ReadRawDevice.Core;
-using ReadRawDevice.Gui.Model;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+    using System.Threading;
+    using System.Windows.Input;
+    using Microsoft.Win32;
+    using ReadRawDevice.Core;
+    using ReadRawDevice.Gui.Model;
 
     /// <summary>
     /// Main view-model for main-view
@@ -227,7 +228,38 @@ using ReadRawDevice.Gui.Model;
         /// <returns></returns>
         internal void ExecuteExtractCommand(object parameter)
         {
-            throw new NotImplementedException();
+            this.ViewModelVisualState = VS_STATE_WORKING;
+            string fileName = GetOutputFileName();
+            if (string.IsNullOrEmpty(fileName))
+            {
+                this.ViewModelVisualState = VS_STATE_NORMAL;
+                return;
+            }
+
+
+        }
+
+
+        protected string GetOutputFileName()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            {
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Filter = "Binary file|*.bin|All files|*.*",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                RestoreDirectory = true,
+                Title = Localization.LocalizedResource["OutputFileDialogTitle"].ToString()
+            };
+
+            bool? result = saveFileDialog.ShowDialog();
+            if (result.HasValue == false)
+            {
+                return string.Empty;
+            }
+
+            return saveFileDialog.FileName;
+
         }
 
         /// <summary>

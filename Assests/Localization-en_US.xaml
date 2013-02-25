@@ -5,4 +5,5 @@
     <system:String x:Key="ButtonExitTitle">Exit</system:String>
     <system:String x:Key="ButtonStartTitle">Extract</system:String>
     <system:String x:Key="ButtonRefreshTitle">Refresh</system:String>
+    <system:String x:Key="OutputFileDialogTitle">Select or create file to save output to it</system:String>
 </ResourceDictionary>
