@@ -121,7 +121,7 @@
     			<TextBlock Grid.Column="1" TextWrapping="Wrap" Text="{Binding WindowTitle, Mode=OneWay}" VerticalAlignment="Center" FontSize="13.333" FontWeight="SemiBold" TextTrimming="WordEllipsis" Margin="5,0,0,0"/>
     		</Grid>
     		<Grid x:Name="GridWork" Grid.Row="1" Margin="0,5">
-    			<ListBox BorderThickness="0" SelectedItem="{Binding SelectedItem, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"/>
+    			<ListBox BorderThickness="0" SelectedItem="{Binding SelectedItem, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{DynamicResource SystemDeviceListBoxItemDataTemplate}" ItemsSource="{Binding SystemDevicesCollection, NotifyOnSourceUpdated=True}"/>
     		</Grid>
     		<Grid x:Name="GridButtons" Grid.Row="2" Margin="5,0,5,5">
     			<Grid.ColumnDefinitions>
