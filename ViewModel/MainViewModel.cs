@@ -6,6 +6,7 @@ namespace ReadRawDevice.Gui.ViewModel
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
     using System.Threading;
+    using System.Windows.Documents;
     using System.Windows.Input;
     using Microsoft.Win32;
     using ReadRawDevice.Core;
@@ -64,9 +65,24 @@ namespace ReadRawDevice.Gui.ViewModel
         private const string VS_STATE_ERROR = "VS_Error";
 
         /// <summary>
+        /// Visual state: Extracting
+        /// </summary>
+        private const string VS_STATE_EXTRACT = "VS_Extract";
+
+        /// <summary>
         /// The cancellation token source
         /// </summary>
         private CancellationTokenSource tokenSource = null;
+
+        /// <summary>
+        /// The current progress value of disk extraction
+        /// </summary>
+        private double progressValue = 0;
+
+        /// <summary>
+        /// The error document to present in 'Error condition'
+        /// </summary>
+        private FlowDocument errorDocument;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
@@ -226,9 +242,9 @@ namespace ReadRawDevice.Gui.ViewModel
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns></returns>
-        internal void ExecuteExtractCommand(object parameter)
+        internal async void ExecuteExtractCommand(object parameter)
         {
-            this.ViewModelVisualState = VS_STATE_WORKING;
+            this.ViewModelVisualState = VS_STATE_EXTRACT;
             string fileName = GetOutputFileName();
             if (string.IsNullOrEmpty(fileName))
             {
@@ -236,7 +252,48 @@ namespace ReadRawDevice.Gui.ViewModel
                 return;
             }
 
+            IProgress<double> progressCallback = new Progress<double>((val) =>
+            {
+                this.ProgressValue = val;
+            });
 
+            tokenSource.Cancel();
+            tokenSource.Dispose();
+            tokenSource = new CancellationTokenSource();
+
+            long totalBytesRead = 0;
+
+            try
+            {
+                totalBytesRead = await mainModel.ExtractDisk(this.SelectedItem, fileName, progressCallback, tokenSource.Token);
+                this.ViewModelVisualState = VS_STATE_NORMAL;
+            }
+            catch (Exception exp_gen)
+            {
+                this.ViewModelVisualState = VS_STATE_NORMAL;
+                OnError(exp_gen);
+            }
+
+        }
+
+        /// <summary>
+        /// Gets or sets the progress value of current disk extraction
+        /// </summary>
+        /// <value>
+        /// The progress value (in percents)
+        /// </value>
+        public double ProgressValue
+        {
+            get
+            {
+                return progressValue;
+            }
+
+            set
+            {
+                progressValue = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -247,7 +304,7 @@ namespace ReadRawDevice.Gui.ViewModel
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog()
             {
-                CheckFileExists = true,
+                CheckFileExists = false,
                 CheckPathExists = true,
                 Filter = "Binary file|*.bin|All files|*.*",
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
@@ -401,6 +458,28 @@ namespace ReadRawDevice.Gui.ViewModel
 
             tokenSource.Cancel();
             tokenSource.Dispose();
+
+            this.ErrorDocument = ErrorDocumentCreator.Create(error);
+        }
+
+        /// <summary>
+        /// Gets the error document.
+        /// </summary>
+        /// <value>
+        /// The error document.
+        /// </value>
+        public FlowDocument ErrorDocument
+        {
+            get
+            {
+                return errorDocument;
+            }
+
+            private set
+            {
+                errorDocument = value;
+                OnPropertyChanged();
+            }
         }
     }
 }

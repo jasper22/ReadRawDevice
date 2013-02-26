@@ -1,6 +1,7 @@
 ﻿
 namespace ReadRawDevice.Gui.Model
 {
+    using System;
     using System.Collections.ObjectModel;
     using System.Threading;
     using System.Threading.Tasks;
@@ -54,24 +55,17 @@ namespace ReadRawDevice.Gui.Model
         }
 
 
-        //protected async void Init()
-        //{
-        //    Core.DeviceCollection devColl = await engine.BuildDevicesAsync().ConfigureAwait(false);
-        //    string path = System.IO.Path.Combine(Environment.CurrentDirectory, "diskOutput.bin");
-
-        //    var device = devColl.Where(dev =>
-        //    {
-        //        return (dev.DiskSize.HasValue) && (dev.FriendlyName.Equals("Alex EFI_TEST USB Device"));
-        //    }).First();
-
-        //    IProgress<int> prog = new Progress<int>((val) => {
-        //        System.Diagnostics.Trace.WriteLine("Progress is: " + val.ToString());
-        //    });
-
-        //    long bytesRead = await engine.ExtractDiskAsync(device, path, prog).ConfigureAwait(false);
-
-        //    MessageBox.Show("All done.\nRead: " + bytesRead.ToString() + " bytes");
-        //}
-
+        /// <summary>
+        /// Extracts the disk to provided file
+        /// </summary>
+        /// <param name="device">The device to extract from</param>
+        /// <param name="outputFileName">Name of the output file including path</param>
+        /// <param name="progressCallback">The progress callback.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>Task that execute the process and return total number of bytes read from device</returns>
+        internal Task<long> ExtractDisk(SystemDevice device, string outputFileName, IProgress<double> progressCallback, CancellationToken token)
+        {
+            return engine.ExtractDiskAsync(device, outputFileName, progressCallback, token);
+        }
     }
 }

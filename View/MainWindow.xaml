@@ -4,6 +4,7 @@
         xmlns:ViewModel="clr-namespace:ReadRawDevice.Gui.ViewModel" 
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+		xmlns:local="clr-namespace:ReadRawDevice.Gui.View" 
 		mc:Ignorable="d" 
 		x:Class="ReadRawDevice.Gui.View.MainWindow"
         Title="MainWindow" 
@@ -29,6 +30,10 @@
 		<ViewModel:MainViewModel/>
 	</Window.DataContext>
 
+	<Window.TaskbarItemInfo>
+		<TaskbarItemInfo ProgressValue="{Binding ProgressValue}" />
+	</Window.TaskbarItemInfo>
+
     <Border x:Name="border" CornerRadius="10" BorderThickness="1" BorderBrush="{DynamicResource MainWindowBorderBrush}" 
 		ViewModel:VisualStateManagerEx.VisualState="{Binding ViewModelVisualState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
     	<VisualStateManager.VisualStateGroups>
@@ -42,9 +47,56 @@
     					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="GridWork">
     						<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
     					</ObjectAnimationUsingKeyFrames>
+    					<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="button">
+    						<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+    					</BooleanAnimationUsingKeyFrames>
+    					<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="button1">
+    						<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+    					</BooleanAnimationUsingKeyFrames>
+    					<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="button2">
+    						<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+    					</BooleanAnimationUsingKeyFrames>
     				</Storyboard>
     			</VisualState>
-    			<VisualState x:Name="VS_Error"/>
+    			<VisualState x:Name="VS_Error">
+    				<Storyboard>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="GridWork">
+    						<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+    					</ObjectAnimationUsingKeyFrames>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="GridError">
+    						<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+    					</ObjectAnimationUsingKeyFrames>
+    					<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="button1">
+    						<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+    					</BooleanAnimationUsingKeyFrames>
+    					<ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="bindableRichTextBox">
+    						<EasingThicknessKeyFrame KeyTime="0" Value="10"/>
+    					</ThicknessAnimationUsingKeyFrames>
+    				</Storyboard>
+    			</VisualState>
+    			<VisualState x:Name="VS_Extract">
+    				<Storyboard>
+    					<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="button">
+    						<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+    					</BooleanAnimationUsingKeyFrames>
+    					<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="button1">
+    						<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+    					</BooleanAnimationUsingKeyFrames>
+    					<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="button2">
+    						<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+    					</BooleanAnimationUsingKeyFrames>
+
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="GridWaiting">
+    						<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+    					</ObjectAnimationUsingKeyFrames>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="progressBar">
+    						<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+    					</ObjectAnimationUsingKeyFrames>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="GridWork">
+    						<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+    					</ObjectAnimationUsingKeyFrames>
+    				</Storyboard>
+    			</VisualState>
     		</VisualStateGroup>
     	</VisualStateManager.VisualStateGroups>
     	<Border.Background>
@@ -69,70 +121,70 @@
     			<TextBlock Grid.Column="1" TextWrapping="Wrap" Text="{Binding WindowTitle, Mode=OneWay}" VerticalAlignment="Center" FontSize="13.333" FontWeight="SemiBold" TextTrimming="WordEllipsis" Margin="5,0,0,0"/>
     		</Grid>
     		<Grid x:Name="GridWork" Grid.Row="1" Margin="0,5">
-    			<ListBox ItemsSource="{Binding SystemDevicesCollection, Mode=OneWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" ItemTemplate="{DynamicResource SystemDeviceListBoxItemDataTemplate}" BorderThickness="0" SelectedItem="{Binding SelectedItem, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"/>
+    			<ListBox BorderThickness="0" SelectedItem="{Binding SelectedItem, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"/>
     		</Grid>
-    		<Grid x:Name="GridButtons" Grid.Row="2" Margin="5,0,5,5" d:IsLocked="True">
+    		<Grid x:Name="GridButtons" Grid.Row="2" Margin="5,0,5,5">
     			<Grid.ColumnDefinitions>
     				<ColumnDefinition MinWidth="76" Width="76*"/>
-    				<ColumnDefinition Width="276*"/>
+    				<ColumnDefinition Width="5" MaxWidth="5"/>
+    				<ColumnDefinition Width="268*"/>
     				<ColumnDefinition Width="5" MaxWidth="5"/>
     				<ColumnDefinition MinWidth="76" Width="76*"/>
     				<ColumnDefinition Width="5" MaxWidth="5"/>
     				<ColumnDefinition MinWidth="76" Width="76*"/>
     			</Grid.ColumnDefinitions>
-    			<Button Content="{Binding ButtonExitTitle, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="22" Grid.Column="5" IsCancel="True" Command="{Binding CommandExit, Mode=OneWay}"/>
-    			<Button Content="{Binding ButtonStartTitle, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Grid.Column="3" IsDefault="True" Command="{Binding CommandExtract, Mode=OneWay}"/>
-    			<Button Content="{Binding ButtonRefreshTitle, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Command="{Binding CommandRefresh, Mode=OneWay}"/>
+    			<Button x:Name="button" Content="{Binding ButtonExitTitle, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="22" Grid.Column="6" IsCancel="True" Command="{Binding CommandExit, Mode=OneWay}"/>
+    			<Button x:Name="button2" Content="{Binding ButtonStartTitle, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Grid.Column="4" IsDefault="True" Command="{Binding CommandExtract, Mode=OneWay}"/>
+    			<Button x:Name="button1" Content="{Binding ButtonRefreshTitle, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Command="{Binding CommandRefresh, Mode=OneWay}"/>
+    			<ProgressBar x:Name="progressBar" Grid.Column="2" Value="{Binding ProgressValue, NotifyOnSourceUpdated=True}" Visibility="Collapsed"/>
     		</Grid>
     		<Grid x:Name="GridWaiting" Grid.Row="1" Visibility="Collapsed">
 				<Canvas Width = "50" Height = "50">
 						<Canvas.Triggers>
-							<EventTrigger RoutedEvent = "Canvas.Loaded">
-								<EventTrigger.Actions>
-									<BeginStoryboard>
-										<Storyboard
-											x:Name = "MetroLoadingAnimation"
+							<EventTrigger RoutedEvent = "FrameworkElement.Loaded">
+								<BeginStoryboard>
+									<Storyboard
+										x:Name = "MetroLoadingAnimation"
+										BeginTime = "00:00:00.000"
+										Duration = "00:00:2.000"
+										RepeatBehavior = "Forever">
+										<DoubleAnimation
+											Storyboard.TargetName = "p0"
+											Storyboard.TargetProperty = "(UIElement.RenderTransform).(RotateTransform.Angle)"
+											From = "0"
+											To = "360"
 											BeginTime = "00:00:00.000"
-											Duration = "00:00:2.000"
-											RepeatBehavior = "Forever">
-											<DoubleAnimation
-												Storyboard.TargetName = "p0"
-												Storyboard.TargetProperty = "(UIElement.RenderTransform).(RotateTransform.Angle)"
-												From = "0"
-												To = "360"
-												BeginTime = "00:00:00.000"
-												Duration = "00:00:01.000"/>
-											<DoubleAnimation
-												Storyboard.TargetName = "p1"
-												Storyboard.TargetProperty = "(UIElement.RenderTransform).(RotateTransform.Angle)"
-												From = "0"
-												To = "360"
-												BeginTime = "00:00:00.100"
-												Duration = "00:00:01.100"/>
-											<DoubleAnimation
-												Storyboard.TargetName = "p2"
-												Storyboard.TargetProperty = "(UIElement.RenderTransform).(RotateTransform.Angle)"
-												From = "0"
-												To = "360"
-												BeginTime = "00:00:00.200"
-												Duration = "00:00:01.200"/>
-											<DoubleAnimation
-												Storyboard.TargetName = "p3"
-												Storyboard.TargetProperty = "(UIElement.RenderTransform).(RotateTransform.Angle)"
-												From = "0"
-												To = "360"
-												BeginTime = "00:00:00.300"
-												Duration = "00:00:01.300"/>
-											<DoubleAnimation
-												Storyboard.TargetName = "p4"
-												Storyboard.TargetProperty = "(UIElement.RenderTransform).(RotateTransform.Angle)"
-												From = "0"
-												To = "360"
-												BeginTime = "00:00:00.400"
-												Duration = "00:00:01.400"/>
-										</Storyboard>
-									</BeginStoryboard>
-								</EventTrigger.Actions>
+											Duration = "00:00:01.000"/>
+										<DoubleAnimation
+											Storyboard.TargetName = "p1"
+											Storyboard.TargetProperty = "(UIElement.RenderTransform).(RotateTransform.Angle)"
+											From = "0"
+											To = "360"
+											BeginTime = "00:00:00.100"
+											Duration = "00:00:01.100"/>
+										<DoubleAnimation
+											Storyboard.TargetName = "p2"
+											Storyboard.TargetProperty = "(UIElement.RenderTransform).(RotateTransform.Angle)"
+											From = "0"
+											To = "360"
+											BeginTime = "00:00:00.200"
+											Duration = "00:00:01.200"/>
+										<DoubleAnimation
+											Storyboard.TargetName = "p3"
+											Storyboard.TargetProperty = "(UIElement.RenderTransform).(RotateTransform.Angle)"
+											From = "0"
+											To = "360"
+											BeginTime = "00:00:00.300"
+											Duration = "00:00:01.300"/>
+										<DoubleAnimation
+											Storyboard.TargetName = "p4"
+											Storyboard.TargetProperty = "(UIElement.RenderTransform).(RotateTransform.Angle)"
+											From = "0"
+											To = "360"
+											BeginTime = "00:00:00.400"
+											Duration = "00:00:01.400"/>
+									</Storyboard>
+								</BeginStoryboard>
 							</EventTrigger>
 						</Canvas.Triggers>
 						<Border
@@ -232,6 +284,9 @@
 						</Border>
 					</Canvas>    			
 			</Grid>
+    		<Grid x:Name="GridError" Grid.Row="1" Visibility="Collapsed">
+    			<local:BindableRichTextBox x:Name="bindableRichTextBox" Document="{Binding ErrorDocument, Mode=OneWay, NotifyOnSourceUpdated=True}" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0" Margin="10,10,10,0" />
+    		</Grid>
     	</Grid>
     </Border>
 </Window>

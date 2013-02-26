@@ -66,4 +66,15 @@
         <Setter Property = "Opacity" Value = "1"/>
     </Style>
 
+    <Color x:Key="AccentColor">#3399ff</Color>
+    <Color x:Key="AccentLightColor">#7fbfff</Color>
+    <SolidColorBrush x:Key="Accent" Color="{DynamicResource AccentColor}" />
+    <SolidColorBrush x:Key="AccentLight" Color="{DynamicResource AccentLightColor}" />
+
+	<LinearGradientBrush x:Key="WindowHeaderGradient" StartPoint="0, 0" EndPoint="0, 1" Opacity=".1">
+        <GradientStop Offset="0" Color="{DynamicResource AccentColor}" />
+        <GradientStop Offset=".3" Color="{DynamicResource AccentColor}" />
+        <GradientStop Offset="1" Color="Transparent" />
+    </LinearGradientBrush>
+
 </ResourceDictionary>

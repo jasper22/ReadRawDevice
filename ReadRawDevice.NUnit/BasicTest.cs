@@ -111,7 +111,8 @@ namespace ReadRawDevice.NUnit
                 return (dev.DiskSize.HasValue) && (dev.FriendlyName.Equals("Alex EFI_TEST USB Device"));
             }).First();
 
-            var progressIndicator = new Progress<int>(progress => {
+            var progressIndicator = new Progress<double>(progress =>
+            {
                 System.Diagnostics.Debug.WriteLine("Progress is: " + progress.ToString() + "%");
             });
 

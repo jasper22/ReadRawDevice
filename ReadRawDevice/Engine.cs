@@ -67,9 +67,7 @@ namespace ReadRawDevice
             throw new NotImplementedException();
         }
 
-        //public Task<long> ExtractDiskAsync(SystemDevice device, string outputFile, IProgress<int> progress)
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
-        public Task<long> ExtractDiskAsync(SystemDevice device, string outputFile, IProgress<int> progress, CancellationToken token)
+        public Task<long> ExtractDiskAsync(SystemDevice device, string outputFile, IProgress<double> progress, CancellationToken token)
         {
             //
             // If bufferSize will be tooo small (like: 512 bytes) the iteration of ReadFile will fail with E_FAIL or some SEH exception :(
@@ -127,7 +125,7 @@ namespace ReadRawDevice
 
                         if (progress != null)
                         {
-                            progress.Report((int)Math.Round((double)((bytesRead * 100) / device.DiskSize.Value)));
+                            progress.Report(Math.Round((double)((bytesRead * 100) / device.DiskSize.Value)));
                         }
 
                         // Must not (!) increase position - everything will be read to NULL
