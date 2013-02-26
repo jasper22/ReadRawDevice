@@ -19,6 +19,16 @@ namespace ReadRawDevice
     {
         private CancellationToken token = CancellationToken.None;
 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceBuilder"/> class.
+        /// </summary>
+        internal DeviceBuilder()
+            : base()
+        {
+
+        }
+
         /// <summary>
         /// Builds the list of devices
         /// </summary>

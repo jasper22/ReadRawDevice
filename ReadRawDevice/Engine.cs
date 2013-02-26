@@ -36,6 +36,11 @@ namespace ReadRawDevice
         /// <returns></returns>
         public Task<VolumesCollection> BuildVolumesAsync(CancellationToken token)
         {
+            if (deviceBuilder.IfUserAdmin() == false)
+            {
+                throw new System.Security.SecurityException("User must be administrator to access the hardware. Please re-login");
+            }
+
             return Task.Factory.StartNew<VolumesCollection>(() =>
             {
                 return volumeBuilder.Build(token);
@@ -48,6 +53,11 @@ namespace ReadRawDevice
         /// <returns></returns>
         public Task<DeviceCollection> BuildDevicesAsync(CancellationToken token)
         {
+            if (deviceBuilder.IfUserAdmin() == false)
+            {
+                throw new System.Security.SecurityException("User must be administrator to access the hardware. Please re-login");
+            }
+
             return Task.Factory.StartNew<DeviceCollection>(() =>
             {
                 return deviceBuilder.Build(token);
@@ -77,6 +87,11 @@ namespace ReadRawDevice
         /// <returns>Task that return as result the total number of readed bytes</returns>
         public Task<long> ExtractDiskAsync(SystemDevice device, string outputFile, IProgress<double> progress, CancellationToken token)
         {
+            if (deviceBuilder.IfUserAdmin() == false)
+            {
+                throw new System.Security.SecurityException("User must be administrator to access the hardware. Please re-login");
+            }
+
             //
             // If bufferSize will be tooo small (like: 512 bytes) the iteration of ReadFile will fail with E_FAIL or some SEH exception :(
             int sectorsReadAtOnce = Convert.ToInt32(device.SectorsCount / 100) + 1; // in 'sectors' not bytes !

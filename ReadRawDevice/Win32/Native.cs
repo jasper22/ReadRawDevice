@@ -26,26 +26,37 @@ using ReadRawDevice.Core;
         /// <summary>
         /// Initializes a new instance of the <see cref="Native"/> class.
         /// </summary>
-        /// <exception cref="System.ApplicationException">User must be administrator to access the hardware. Please re-login</exception>
         internal Native()
+        {
+        }
+
+        /// <summary>
+        /// Ifs the user admin.
+        /// </summary>
+        /// <returns></returns>
+        internal bool IfUserAdmin()
         {
             // Check if user is admin
             if (Priviligies.IfUserAdmin() == false)
             {
-                throw new System.Security.SecurityException("User must be administrator to access the hardware. Please re-login");
+                //throw new System.Security.SecurityException("User must be administrator to access the hardware. Please re-login");
+                return false;
             }
 
             if (Priviligies.GetVolumePathNamesForVolumeName_Available == false)
             {
-                throw new System.Security.SecurityException("Some internal functions is only available on Windows XP/2003 and above");
+                //throw new System.Security.SecurityException("Some internal functions is only available on Windows XP/2003 and above");
+                return false;
             }
+
+            return true;
         }
 
         /// <summary>
         /// Gets the volumes names.
         /// </summary>
         /// <returns>List of volumes</returns>
-        /// <exception cref="System.ApplicationException">Internal program error. Could not aquire handle to device</exception>
+        /// <exception cref="System.ApplicationException">Internal program error. Could not acquire handle to device</exception>
         internal virtual IEnumerable<string> GetVolumesNames()
         {
             const int volumeNameLength = UnsafeNativeMethods.MAX_PATH;

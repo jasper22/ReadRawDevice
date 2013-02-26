@@ -16,6 +16,12 @@ namespace ReadRawDevice
     {
         private CancellationToken token = CancellationToken.None;
 
+        internal VolumeBuilder()
+            : base()
+        {
+
+        }
+
         /// <summary>
         /// Fully builds this list of <see cref="SystemVolume"/> objects
         /// </summary>
@@ -51,7 +57,7 @@ namespace ReadRawDevice
 
 
         /// <summary>
-        /// Deeply analyzes the devices and set apropiate data on them
+        /// Deeply analyzes the devices and set appropriate data on them
         /// </summary>
         /// <param name="listOfDevices">The list of devices.</param>
         /// <param name="token">The cancellation token.</param>
@@ -95,7 +101,7 @@ namespace ReadRawDevice
         /// </summary>
         /// <param name="device"><see cref="SystemVolume"/> to query</param>
         /// <param name="token">Cancellation token</param>
-        /// <returns>Task that result in Nullable <see cref="VOLUME_DISK_EXTENTS"/> structure</returns>
+        /// <returns>Task that result in <c>Nullable</c> <see cref="VOLUME_DISK_EXTENTS"/> structure</returns>
         protected Task<Nullable<VOLUME_DISK_EXTENTS>> GetVolumeDiskExtents(SystemVolume device, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
