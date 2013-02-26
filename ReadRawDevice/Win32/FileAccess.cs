@@ -4,7 +4,7 @@ namespace ReadRawDevice.Win32
     using System;
 
     /// <summary>
-    /// Define access mode for <see cref="CreateFile"/> function
+    /// Define access mode for <c>CreateFile</c> function
     /// </summary>
     [Flags]
     internal enum FileAccess : uint

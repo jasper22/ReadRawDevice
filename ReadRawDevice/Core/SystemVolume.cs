@@ -31,7 +31,7 @@ namespace ReadRawDevice.Core
                 {
                     this.VolumeSize = drvInfo.TotalSize;
                 }
-                catch (Exception exp_gen)
+                catch (Exception )
                 {
                     this.VolumeSize = null;
                 }
@@ -119,6 +119,7 @@ namespace ReadRawDevice.Core
         /// <value>
         /// The serial number.
         /// </value>
+        [CLSCompliant(false)]
         public uint SerialNumber
         {
             get;
@@ -137,18 +138,9 @@ namespace ReadRawDevice.Core
             internal set;
         }
 
-        ///// <summary>
-        ///// Gets the size of the disk (in bytes);
-        ///// </summary>
-        ///// <value>
-        ///// The size of the disk (in bytes)
-        ///// </value>
-        //public long? DiskSize
-        //{
-        //    get;
-        //    private set;
-        //}
-
+        /// <summary>
+        /// Gets the partition on this volume
+        /// </summary>
         public IEnumerable<DevicePartition> Partitions
         {
             get;

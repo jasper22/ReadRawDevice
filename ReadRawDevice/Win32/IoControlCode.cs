@@ -4,14 +4,14 @@ namespace ReadRawDevice.Win32
     using System;
 
     /// <summary>
-    /// Enum define values taht enter into <see cref="DeviceIoControl"/> function as <c>dwIoControlCode</c> parameter
+    /// Enumerable values that enter into <c>DeviceIoControl</c> function as <c>dwIoControlCode</c> parameter
     /// </summary>
     /// <remarks>Some of the code was taken from: http://blogs.msdn.com/b/codedebate/archive/2007/12/18/6797175.aspx </remarks>
     [Flags]
     internal enum IoControlCode : uint
     {
-        ///
-        /// STORAGE
+        ////
+        //// STORAGE
 
         /// <summary>
         /// Base 'Storage' definition
@@ -141,7 +141,6 @@ namespace ReadRawDevice.Win32
         /// <summary>
         /// Base value for 'volume'
         /// </summary>
-        [Obsolete]
         VolumeBase = 0x00000056,
 
         /// <summary>
@@ -150,8 +149,8 @@ namespace ReadRawDevice.Win32
         /// <remarks>MSDN: http://msdn.microsoft.com/en-us/library/windows/desktop/aa365194(v=vs.85).aspx </remarks>
         IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS = (VolumeBase << 16) | (0 << 2) |  IoMethod.Buffered | (0 << 14),
 
-        ///
-        /// DISK
+        ////
+        //// DISK
 
         /// <summary>
         /// Base 'Disk' definition
@@ -364,8 +363,8 @@ namespace ReadRawDevice.Win32
         /// <remarks>MSDN: http://msdn.microsoft.com/en-us/library/windows/hardware/ff560371(v=vs.85).aspx </remarks>
         IOCTL_DISK_GET_MEDIA_TYPES = (DiskBase << 16) | (0x0300 << 2) | IoMethod.Buffered | (0 << 14),
         
-        ///
-        /// CHANGER
+        ////
+        //// CHANGER
 
         /// <summary>
         /// Define base 'Changer' value
@@ -438,8 +437,8 @@ namespace ReadRawDevice.Win32
         /// <remarks>MSDN: http://msdn.microsoft.com/en-us/library/windows/desktop/aa363399(v=vs.85).aspx </remarks>
         IOCTL_CHANGER_QUERY_VOLUME_TAGS = (ChangerBase << 16) | (0x000B << 2) | IoMethod.Buffered | ((System.IO.FileAccess.Read | System.IO.FileAccess.Write) << 14),
         
-        ///
-        /// FILESYSTEM
+        ////
+        //// FILESYSTEM
 
         /// <summary>
         /// Requests a level 1 opportunistic lock on a file.
@@ -767,7 +766,7 @@ namespace ReadRawDevice.Win32
         FsctlEnableUpgrade = (FileDeviceType.FILE_DEVICE_FILE_SYSTEM << 16) | (52 << 2) | IoMethod.Buffered | (System.IO.FileAccess.Write << 14),
         
         /// <summary>
-        /// The FSCTL_SET_ENCRYPTION request sets the encryption for the file or directory associated with the given handle.<37><38>
+        /// The FSCTL_SET_ENCRYPTION request sets the encryption for the file or directory associated with the given handle.
         /// The message contains an ENCRYPTION_BUFFER structure that indicates whether to encrypt/decrypt a file or an individual stream.
         /// </summary>
         /// <remarks>MSDN: http://msdn.microsoft.com/en-us/library/cc980038.aspx </remarks>

@@ -119,7 +119,7 @@ using ReadRawDevice.Core;
         /// Prepares the list for query dos device. Strip un-needed characters, etc...
         /// </summary>
         /// <param name="volumeNames">The volume names.</param>
-        /// <returns>Dicitionary prepared to enter to <see cref="QueryDosDevice"/> function  (Original name = Key, Stripped/Read name = Value)</returns>
+        /// <returns>Dictionary prepared to enter to <c>QueryDosDevice</c>  function  (Original name = Key, Stripped/Read name = Value)</returns>
         private static IDictionary<string,string> PrepareListForQueryDosDevice(IEnumerable<string> volumeNames)
         {
             return (from volName in volumeNames.AsParallel()

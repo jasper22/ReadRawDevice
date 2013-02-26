@@ -55,18 +55,26 @@ namespace ReadRawDevice
             , token);
         }
 
-        /// <summary>
-        /// Extract the raw data from the volume asynchronously
-        /// </summary>
-        /// <param name="device"><see cref="SystemVolume"/> that will be queried</param>
-        /// <param name="outputFile">File path and file name where to store raw data</param>
-        /// <param name="progress">Progress callback</param>
-        /// <returns>Task</returns>
-        public async Task ExtractVolumeAsync(SystemVolume device, string outputFile, IProgress<int> progress)
-        {
-            throw new NotImplementedException();
-        }
+        ///// <summary>
+        ///// Extract the raw data from the volume asynchronously
+        ///// </summary>
+        ///// <param name="device"><see cref="SystemVolume"/> that will be queried</param>
+        ///// <param name="outputFile">File path and file name where to store raw data</param>
+        ///// <param name="progress">Progress callback</param>
+        ///// <returns>Task</returns>
+        //public async Task ExtractVolumeAsync(SystemVolume device, string outputFile, IProgress<int> progress)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
+        /// <summary>
+        /// Extracts the disk asynchronously.
+        /// </summary>
+        /// <param name="device"><see cref="SystemDevice"/> that will be queried</param>
+        /// <param name="outputFile">The output file.</param>
+        /// <param name="progress">The progress callback</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>Task that return as result the total number of readed bytes</returns>
         public Task<long> ExtractDiskAsync(SystemDevice device, string outputFile, IProgress<double> progress, CancellationToken token)
         {
             //
@@ -97,8 +105,6 @@ namespace ReadRawDevice
 
                     while(true)
                     {
-                        System.Diagnostics.Debug.WriteLine("bytesRead is: " + bytesRead.ToString() + " /" + device.DiskSize.Value.ToString() + " buffer size: " + buffer.Length.ToString() + " left: " + (device.DiskSize.Value - bytesRead).ToString());
-
                         functionResult = UnsafeNativeMethods.ReadFile(deviceHandle, buffer, Convert.ToUInt32(buffer.Length), ref lpNumberOfBytesRead, IntPtr.Zero);
 
                         if (functionResult)
@@ -110,12 +116,21 @@ namespace ReadRawDevice
                         else
                         {
                             int win32err = Marshal.GetLastWin32Error();
-                            System.Diagnostics.Debug.WriteLine("Error: bytesRead is: " + bytesRead.ToString() + " /" + device.DiskSize.Value.ToString() + " buffer size: " + buffer.Length.ToString() + " left: " + (device.DiskSize.Value - bytesRead).ToString());
 
                             if (win32err == UnsafeNativeMethods.ERROR_SECTOR_NOT_FOUND)
                             {
                                 // This is a device black-hole
-                                break;
+                                // try to squeeze as much as I can
+                                if (bufferSize == device.BytesPerSector)
+                                {
+                                    // That's the last one
+                                    break;
+                                }
+                                else
+                                {
+                                    bufferSize = device.BytesPerSector;
+                                    buffer = new byte[bufferSize];
+                                }
                             }
                             else
                             {
@@ -141,9 +156,7 @@ namespace ReadRawDevice
                             else 
                             {
                                 // Collect leftovers
-                                System.Diagnostics.Trace.WriteLine("Leftovers: bytesRead = " + bytesRead.ToString() + " buffferSize = " + bufferSize.ToString() + " diskSize = " + device.DiskSize.Value.ToString());
                                 buffer = new byte[(bytesRead + bufferSize) - device.DiskSize.Value];
-                                System.Diagnostics.Trace.WriteLine("Buffer re-sized to: " + buffer.Length.ToString() + " bytes");
                             }
                         }
 

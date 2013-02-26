@@ -8,7 +8,7 @@ namespace ReadRawDevice.Win32
     /// Contains GUID partition table (GPT) partition information.
     /// </summary>
     /// <remarks>MSDN: http://msdn.microsoft.com/en-us/library/aa365449(v=vs.85).aspx </remarks>
-    [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Unicode)]
+    [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Unicode), CLSCompliant(false)]
     public struct PARTITION_INFORMATION_GPT
     {
         /// <summary>

@@ -4,7 +4,7 @@ namespace ReadRawDevice.Win32
     using System;
 
     /// <summary>
-    /// Define values for <see cref="DeviceIoControl"/> method (if buffered, direct, etc...)
+    /// Define values for <c>DeviceIoControl</c> method (if buffered, direct, etc...)
     /// </summary>
     [Flags]
     internal enum IoMethod : uint

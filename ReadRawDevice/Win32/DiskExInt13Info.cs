@@ -7,7 +7,7 @@ namespace ReadRawDevice.Win32
     /// The DISK_EX_INT13_INFO structure is used by the BIOS to report disk detection data for a partition with an extended INT13 format.
     /// </summary>
     /// <remarks>MSDN: http://msdn.microsoft.com/en-us/library/windows/hardware/ff552610(v=vs.85).aspx </remarks>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential), System.CLSCompliant(false)]
     public struct DISK_EX_INT13_INFO
     {
         /// <summary>
