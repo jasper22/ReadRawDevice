@@ -178,7 +178,7 @@ using ReadRawDevice.Core;
         internal virtual DISK_GEOMETRY_EX GetDriveGeometry(DeviceHandle device)
         {
             DeviceIoControl<DISK_GEOMETRY_EX> deviceControl = new DeviceIoControl<DISK_GEOMETRY_EX>();
-            return deviceControl.GetDataForDevice(device, IoControlCode.IOCTL_DISK_GET_DRIVE_GEOMETRY_EX);
+            return deviceControl.GetDiskGeometryEx(device);
         }
 
         /// <summary>

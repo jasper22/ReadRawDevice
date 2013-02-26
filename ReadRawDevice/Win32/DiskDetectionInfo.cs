@@ -16,7 +16,7 @@ namespace ReadRawDevice.Win32
         public ulong SizeOfDetectInfo;
 
         /// <summary>
-        /// <see cref="DetectionType"/> for memeber explanation
+        /// <see cref="DetectionType"/> for member explanation
         /// </summary>
         public DetectionType DetectionType;
 

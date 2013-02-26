@@ -205,5 +205,87 @@ namespace ReadRawDevice.Win32
                 throw new Win32Exception("Exception occurred while trying to work with Windows kernel", exp_gen);
             }
         }
+
+        /// <summary>
+        /// Gets the disk geometry extended information
+        /// </summary>
+        /// <param name="device">The device to query</param>
+        /// <returns>Structure <see cref="DISK_GEOMETRY_EX"/></returns>
+        /// <remarks>MSDN: http://msdn.microsoft.com/en-us/library/windows/desktop/aa365171(v=vs.85).aspx </remarks>
+        internal DISK_GEOMETRY_EX GetDiskGeometryEx(DeviceHandle device)
+        {
+            bool functionResult = false;
+            IntPtr ptrInputData = IntPtr.Zero;
+            var structureSize = 256;
+            int lpBytesReturned = 0;
+            NativeOverlapped nativeOverlapped = new NativeOverlapped();
+
+            try
+            {
+                // First try
+                ptrInputData = Marshal.AllocHGlobal(structureSize);
+
+                while (functionResult == false)
+                {
+                    lock (lockMe)
+                    {
+                        IntPtr handle = device.OpenDeviceHandle();
+
+                        functionResult = UnsafeNativeMethods.DeviceIoControl(handle,
+                                                                                IoControlCode.IOCTL_DISK_GET_DRIVE_GEOMETRY_EX,
+                                                                                IntPtr.Zero,
+                                                                                0,
+                                                                                ptrInputData,
+                                                                                structureSize,
+                                                                                ref lpBytesReturned,
+                                                                                ref nativeOverlapped);
+
+                        device.CloseDeviceHandle();
+
+                    }
+
+                    if (functionResult == false)
+                    {
+                        if (Marshal.GetLastWin32Error() == UnsafeNativeMethods.ERROR_INSUFFICIENT_BUFFER)
+                        {
+                            Marshal.FreeHGlobal(ptrInputData);
+                            checked { structureSize = structureSize * 2; }
+                            ptrInputData = Marshal.AllocHGlobal(structureSize);
+                        }
+                        else
+                        {
+                            throw new Win32Exception("Could not acquire information from windows kernel.", new Win32Exception(Marshal.GetLastWin32Error()));
+                        }
+                    }
+                }
+
+                
+                DISK_GEOMETRY_EX diskGeometryEx = new DISK_GEOMETRY_EX();
+                diskGeometryEx.Geometry = (DISK_GEOMETRY) Marshal.PtrToStructure(ptrInputData, typeof(DISK_GEOMETRY));
+
+                // Just after the offset of 'DISK_GEOMETRY' there's a DiskSize value
+                diskGeometryEx.DiskSize = Marshal.ReadInt64(ptrInputData, Marshal.SizeOf(typeof(DISK_GEOMETRY)));
+
+                // PartitionInfo offset = sizeof(diskGeometryEx.Geometry) + sizeof(diskGeometryEx.DiskSize)
+                IntPtr partitionInfo = ptrInputData + Marshal.SizeOf(typeof(DISK_GEOMETRY)) + sizeof(long);
+
+                diskGeometryEx.PartitionInformation = (DISK_PARTITION_INFO) Marshal.PtrToStructure(partitionInfo, typeof(DISK_PARTITION_INFO));
+
+                // DISK_DETECTION_INFO offset = DISK_PARTITION_INFO + length of DISK_PARTITION_INFO.SizeOfPartitionInfo
+                partitionInfo += diskGeometryEx.PartitionInformation.SizeOfPartitionInfo;
+
+                diskGeometryEx.DiskDetectionInfo = (DISK_DETECTION_INFO)Marshal.PtrToStructure(partitionInfo, typeof(DISK_DETECTION_INFO));
+
+                return diskGeometryEx;
+            }
+            catch (Exception exp_gen)
+            {
+                throw new Win32Exception("Exception occurred while trying to work with Windows kernel", exp_gen);
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(ptrInputData);
+            }
+        }
     }
 }

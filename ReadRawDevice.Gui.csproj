@@ -91,7 +91,7 @@
     <Compile Include="ViewModel\Localization.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\VisualStateManagerEx.cs" />
-    <Compile Include="View\BindableRichTextBox .cs" />
+    <Compile Include="View\BindableRichTextBox.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
