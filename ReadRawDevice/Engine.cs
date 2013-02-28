@@ -18,7 +18,6 @@ namespace ReadRawDevice
     {
         private VolumeBuilder volumeBuilder = null;
         private DeviceBuilder deviceBuilder = null;
-        private Reader reader = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Engine"/> class.
@@ -27,7 +26,6 @@ namespace ReadRawDevice
         {
             volumeBuilder = new VolumeBuilder();
             deviceBuilder = new DeviceBuilder();
-            reader = new Reader();
         }
 
         /// <summary>
@@ -84,7 +82,8 @@ namespace ReadRawDevice
         /// <param name="outputFile">The output file.</param>
         /// <param name="progress">The progress callback</param>
         /// <param name="token">The cancellation token.</param>
-        /// <returns>Task that return as result the total number of readed bytes</returns>
+        /// <returns>Task that return as result the total number of read bytes</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1404:CallGetLastErrorImmediatelyAfterPInvoke", Justification = "By design")]
         public Task<long> ExtractDiskAsync(SystemDevice device, string outputFile, IProgress<double> progress, CancellationToken token)
         {
             if (deviceBuilder.IfUserAdmin() == false)
@@ -106,6 +105,8 @@ namespace ReadRawDevice
             long bytesRead = 0;
             uint lpNumberOfBytesRead = 0;
             bool functionResult = false;
+            int win32err = 0;
+            NativeOverlapped nativeOverlapped = new NativeOverlapped();
 
             SystemDevice device2 = new SystemDevice("\\\\.\\PhysicalDrive" + device.DeviceNumber);
             GCHandle gcHandle = new GCHandle();
@@ -120,7 +121,8 @@ namespace ReadRawDevice
 
                     while(true)
                     {
-                        functionResult = UnsafeNativeMethods.ReadFile(deviceHandle, buffer, Convert.ToUInt32(buffer.Length), ref lpNumberOfBytesRead, IntPtr.Zero);
+                        functionResult = UnsafeNativeMethods.ReadFile(deviceHandle, buffer, Convert.ToUInt32(buffer.Length), ref lpNumberOfBytesRead, ref nativeOverlapped);
+                        win32err = Marshal.GetLastWin32Error();
 
                         if (functionResult)
                         {
@@ -130,8 +132,6 @@ namespace ReadRawDevice
                         }
                         else
                         {
-                            int win32err = Marshal.GetLastWin32Error();
-
                             if (win32err == UnsafeNativeMethods.ERROR_SECTOR_NOT_FOUND)
                             {
                                 // This is a device black-hole
@@ -196,7 +196,11 @@ namespace ReadRawDevice
                 {
                     gcHandle.Free();
 
-                    int win32err = Marshal.GetLastWin32Error();
+                    if (win32err == 0)
+                    {
+                        win32err = Marshal.GetLastWin32Error();
+                    }
+
                     var zz = new System.ComponentModel.Win32Exception(win32err);
                     System.Diagnostics.Trace.WriteLine("[]--- Exception in ExtractDiskAsync(): " + exp_gen.ToString());
                     System.Diagnostics.Trace.WriteLine("[]--- Exception in ExtractDiskAsync() (native) : " + zz.ToString());
@@ -211,7 +215,7 @@ namespace ReadRawDevice
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns><c>BinaryWriter</c> for output file</returns>
-        protected BinaryWriter GetOutputStream(string fileName)
+        protected static BinaryWriter GetOutputStream(string fileName)
         {
             FileStream fileStream = null;
             BinaryWriter writer = null;
@@ -223,9 +227,9 @@ namespace ReadRawDevice
                 writer = new BinaryWriter(fileStream, System.Text.Encoding.Default);
                 return writer;
             }
-            catch (Exception exp_gen)
+            catch (Exception )
             {
-                throw exp_gen;
+                throw;
             }
         }
     }

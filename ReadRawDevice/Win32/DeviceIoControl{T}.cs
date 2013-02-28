@@ -22,6 +22,7 @@ namespace ReadRawDevice.Win32
         /// <param name="device">Device to run the command on</param>
         /// <param name="controlCode">Control code to send to windows kernel <see cref="IoControlCode"/></param>
         /// <returns>Data/structure that received after function execution</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "By design")]
         internal T GetDataForDevice(DeviceHandle device, IoControlCode controlCode)
         {
             bool functionResult = false;
@@ -29,6 +30,7 @@ namespace ReadRawDevice.Win32
             var structureSize = Marshal.SizeOf(typeof(T));
             int lpBytesReturned = 0;
             NativeOverlapped nativeOverlapped = new NativeOverlapped();
+            int win32Error = 0;
 
             try
             {
@@ -49,6 +51,7 @@ namespace ReadRawDevice.Win32
                                                                                 structureSize,
                                                                                 ref lpBytesReturned,
                                                                                 ref nativeOverlapped);
+                        win32Error = Marshal.GetLastWin32Error();
 
                         device.CloseDeviceHandle();
 
@@ -56,7 +59,7 @@ namespace ReadRawDevice.Win32
 
                     if (functionResult == false)
                     {
-                        if (Marshal.GetLastWin32Error() == UnsafeNativeMethods.ERROR_INSUFFICIENT_BUFFER)
+                        if (win32Error == UnsafeNativeMethods.ERROR_INSUFFICIENT_BUFFER)
                         {
                             Marshal.FreeHGlobal(ptrInputData);
                             checked { structureSize = structureSize * 2; }
@@ -64,7 +67,7 @@ namespace ReadRawDevice.Win32
                         }
                         else
                         {
-                            throw new Win32Exception("Could not acquire information from windows kernel.", new Win32Exception(Marshal.GetLastWin32Error()));
+                            throw new Win32Exception("Could not acquire information from windows kernel.", new Win32Exception(win32Error));
                         }
                     }
                 }
@@ -102,6 +105,7 @@ namespace ReadRawDevice.Win32
             var structureSize = 48 + (numberOfExpectedPartitions * 144);
             int lpBytesReturned = 0;
             NativeOverlapped nativeOverlapped = new NativeOverlapped();
+            int win32Error = 0;
 
             try
             {
@@ -122,13 +126,15 @@ namespace ReadRawDevice.Win32
                                                                                 structureSize,
                                                                                 ref lpBytesReturned,
                                                                                 ref nativeOverlapped);
+                        
+                        win32Error = Marshal.GetLastWin32Error();
 
                         device.CloseDeviceHandle();
                     }
 
                     if (functionResult == false)
                     {
-                        if (Marshal.GetLastWin32Error() == UnsafeNativeMethods.ERROR_INSUFFICIENT_BUFFER)
+                        if (win32Error == UnsafeNativeMethods.ERROR_INSUFFICIENT_BUFFER)
                         {
                             Marshal.FreeHGlobal(ptrInputData);
                             checked 
@@ -140,7 +146,7 @@ namespace ReadRawDevice.Win32
                         }
                         else
                         {
-                            throw new Win32Exception("Could not acquire information from windows kernel.", new Win32Exception(Marshal.GetLastWin32Error()));
+                            throw new Win32Exception("Could not acquire information from windows kernel.", new Win32Exception(win32Error));
                         }
                     }
                 }
@@ -219,6 +225,7 @@ namespace ReadRawDevice.Win32
             var structureSize = 256;
             int lpBytesReturned = 0;
             NativeOverlapped nativeOverlapped = new NativeOverlapped();
+            int win32Error = 0;
 
             try
             {
@@ -240,13 +247,15 @@ namespace ReadRawDevice.Win32
                                                                                 ref lpBytesReturned,
                                                                                 ref nativeOverlapped);
 
+                        win32Error = Marshal.GetLastWin32Error();
+
                         device.CloseDeviceHandle();
 
                     }
 
                     if (functionResult == false)
                     {
-                        if (Marshal.GetLastWin32Error() == UnsafeNativeMethods.ERROR_INSUFFICIENT_BUFFER)
+                        if (win32Error == UnsafeNativeMethods.ERROR_INSUFFICIENT_BUFFER)
                         {
                             Marshal.FreeHGlobal(ptrInputData);
                             checked { structureSize = structureSize * 2; }
@@ -254,7 +263,7 @@ namespace ReadRawDevice.Win32
                         }
                         else
                         {
-                            throw new Win32Exception("Could not acquire information from windows kernel.", new Win32Exception(Marshal.GetLastWin32Error()));
+                            throw new Win32Exception("Could not acquire information from windows kernel.", new Win32Exception(win32Error));
                         }
                     }
                 }

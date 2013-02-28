@@ -16,7 +16,8 @@
 		WindowStartupLocation="CenterScreen" 
 		SnapsToDevicePixels="True" 
 		UseLayoutRounding="True" 
-		Background="{x:Null}" Icon="/ReadRawDevice.Gui;component/Assests/icon.ico" 
+		Background="{x:Null}" 
+		Icon="/ReadRawDevice.Gui;component/Assests/icon.ico" 
 		MouseDown="Window_MouseDown_1">
 	<Window.Resources>
 		<ResourceDictionary>
@@ -133,9 +134,9 @@
     				<ColumnDefinition Width="5" MaxWidth="5"/>
     				<ColumnDefinition MinWidth="76" Width="76*"/>
     			</Grid.ColumnDefinitions>
-    			<Button x:Name="button" Content="{Binding ButtonExitTitle, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="22" Grid.Column="6" IsCancel="True" Command="{Binding CommandExit, Mode=OneWay}"/>
-    			<Button x:Name="button2" Content="{Binding ButtonStartTitle, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Grid.Column="4" IsDefault="True" Command="{Binding CommandExtract, Mode=OneWay}"/>
-    			<Button x:Name="button1" Content="{Binding ButtonRefreshTitle, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Command="{Binding CommandRefresh, Mode=OneWay}"/>
+    			<Button x:Name="button" Content="{Binding ButtonExitTitle, Mode=OneWay, NotifyOnSourceUpdated=True}" Grid.Column="6" IsCancel="True" Command="{Binding CommandExit, Mode=OneWay}"/>
+    			<Button x:Name="button2" Content="{Binding ButtonStartTitle, Mode=OneWay}" Grid.Column="4" IsDefault="True" Command="{Binding CommandExtract, Mode=OneWay}"/>
+    			<Button x:Name="button1" Content="{Binding ButtonRefreshTitle, Mode=OneWay}" Command="{Binding CommandRefresh, Mode=OneWay}"/>
     			<ProgressBar x:Name="progressBar" Grid.Column="2" Value="{Binding ProgressValue, NotifyOnSourceUpdated=True}" Visibility="Collapsed"/>
     		</Grid>
     		<Grid x:Name="GridWaiting" Grid.Row="1" Visibility="Collapsed">

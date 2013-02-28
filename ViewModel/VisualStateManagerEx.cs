@@ -18,7 +18,14 @@ namespace ReadRawDevice.Gui.ViewModel
         /// <returns></returns>
         public static string GetVisualState(DependencyObject obj)
         {
-            return (string)obj.GetValue(VisualStateProperty);
+            if (obj != null)
+            {
+                return (string)obj.GetValue(VisualStateProperty);
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -28,7 +35,10 @@ namespace ReadRawDevice.Gui.ViewModel
         /// <param name="value">The value.</param>
         public static void SetVisualState(DependencyObject obj, string value)
         {
-            obj.SetValue(VisualStateProperty, value);
+            if (obj != null)
+            {
+                obj.SetValue(VisualStateProperty, value);
+            }
         }
 
         /// <summary>
@@ -45,15 +55,15 @@ namespace ReadRawDevice.Gui.ViewModel
         /// <summary>
         /// Visuals the state changed.
         /// </summary>
-        /// <param name="d">The d.</param>
-        /// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
-        public static void VisualStateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        /// <param name="dependencyObject">The dependency object</param>
+        /// <param name="eventArgs">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        public static void VisualStateChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs eventArgs)
         {
             //Control changeStateControl = d as Control;
-            FrameworkElement changeStateControl = d as FrameworkElement;
+            FrameworkElement changeStateControl = dependencyObject as FrameworkElement;
             if (changeStateControl == null)
             {
-                throw (new Exception("VisualState works only on Controls type"));
+                throw (new ApplicationException("'VisualState' works only on Controls type"));
             }
 
             if (Application.Current.Dispatcher.CheckAccess() == false)
@@ -63,15 +73,15 @@ namespace ReadRawDevice.Gui.ViewModel
                 Application.Current.Dispatcher.BeginInvoke(
                     //() => { VisualStateChanged(d, e); }
                     VisualStateManagerEx.callback
-                    , new object[] { d, e });    //recursive
+                    , new object[] { dependencyObject, eventArgs });    //recursive
             }
             else
             {
-                if (string.IsNullOrEmpty(e.NewValue.ToString()) == false)
+                if (string.IsNullOrEmpty(eventArgs.NewValue.ToString()) == false)
                 {
                     //VisualStateManager.GoToState(changeStateControl, e.NewValue.ToString(), true);
-                    VisualStateManager.GoToElementState(changeStateControl, e.NewValue.ToString(), true);
-                    System.Diagnostics.Debug.WriteLine("[VisualStateManagerEx] Visual state changed to " + e.NewValue.ToString());
+                    VisualStateManager.GoToElementState(changeStateControl, eventArgs.NewValue.ToString(), true);
+                    System.Diagnostics.Debug.WriteLine("[VisualStateManagerEx] Visual state changed to " + eventArgs.NewValue.ToString());
                 }
             }
         }

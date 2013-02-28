@@ -12,6 +12,13 @@ namespace ReadRawDevice.Gui.ViewModel
     internal class ErrorDocumentCreator
     {
         /// <summary>
+        /// Prevents a default instance of the <see cref="ErrorDocumentCreator"/> class from being created.
+        /// </summary>
+        private ErrorDocumentCreator()
+        {
+        }
+
+        /// <summary>
         /// Creates the specified exception to convert.
         /// </summary>
         /// <param name="exceptionToConvert">The exception to convert.</param>

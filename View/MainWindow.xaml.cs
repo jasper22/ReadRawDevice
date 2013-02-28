@@ -9,8 +9,6 @@ namespace ReadRawDevice.Gui.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        ReadRawDevice.Engine engine = new Engine();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>

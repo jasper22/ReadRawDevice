@@ -10,6 +10,13 @@ namespace ReadRawDevice.Win32
     internal class SetupDiInterfacesGuid
     {
         /// <summary>
+        /// Prevents a default instance of the <see cref="SetupDiInterfacesGuid"/> class from being created.
+        /// </summary>
+        private SetupDiInterfacesGuid()
+        {
+        }
+
+        /// <summary>
         /// Disk
         /// </summary>
         internal static readonly Guid GUID_DEVINTERFACE_DISK = Guid.Parse("53f56307-b6bf-11d0-94f2-00a0c91efb8b");

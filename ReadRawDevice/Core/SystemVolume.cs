@@ -17,6 +17,7 @@ namespace ReadRawDevice.Core
         /// <param name="volumeName">Name of the volume.</param>
         /// <param name="deviceName">Name of the device.</param>
         /// <param name="devicePath">The device path.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Volume could be in 'not-ready' state so exception will be raised. We are not interested in state, in case of exception we just set the disk size to 'null'")]
         internal SystemVolume(string volumeName, string deviceName, string devicePath)
             : base(GetFormattedVolumeName(volumeName))
         {

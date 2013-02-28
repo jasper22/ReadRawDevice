@@ -20,6 +20,7 @@ namespace ReadRawDevice.Win32
         /// <summary>
         /// Takes a <see cref="PARTITION_STYLE"/> enumerated value that specifies the type of partition table the disk contains.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Struct declaration")]
         [FieldOffset(4)]
         public PARTITION_STYLE PartitionStyle;
 
@@ -44,6 +45,7 @@ namespace ReadRawDevice.Win32
         /// a disk that is formatted with a GUID Partition Table (GPT) format partition table. This member is valid when PartitionStyle is 
         /// PARTITION_STYLE_GPT. The GUID data type is described on the Using GUIDs in Drivers reference page.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Struct declaration")]
         [FieldOffset(8)]
         public uint MbrSignature;
 
@@ -55,6 +57,7 @@ namespace ReadRawDevice.Win32
         /// a disk that is formatted with a GUID Partition Table (GPT) format partition table. This member is valid when PartitionStyle is 
         /// PARTITION_STYLE_GPT. The GUID data type is described on the Using GUIDs in Drivers reference page.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Struct declaration")]
         [FieldOffset(8)]
         public Guid DiskId;
     }

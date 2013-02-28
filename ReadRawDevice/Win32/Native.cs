@@ -231,7 +231,7 @@ using ReadRawDevice.Core;
 
             if (functionResult == false)
             {
-                throw new Win32Exception("Could not aquire volume information", new Win32Exception(Marshal.GetLastWin32Error()));
+                throw new Win32Exception("Could not acquire volume information", new Win32Exception(Marshal.GetLastWin32Error()));
             }
 
             device.SerialNumber = lpVolumeSerialNumber;

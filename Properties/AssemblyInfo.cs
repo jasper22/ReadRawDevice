@@ -54,3 +54,4 @@ using System.Windows;
 [assembly: AssemblyVersion("1.0.*")]
 
 [assembly: NeutralResourcesLanguageAttribute("en")]
+[assembly: System.CLSCompliant(true)]

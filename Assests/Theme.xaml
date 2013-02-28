@@ -7,8 +7,7 @@
 	xmlns:Converters="clr-namespace:ReadRawDevice.Gui.ViewModel.Converters;assembly=ReadRawDevice.Gui"
 	mc:Ignorable="d">
 
-    <Converters:ConvertLongToString x:Key="ConvertLongToString1"/>
-    <Converters:ConvertLongToString x:Key="ConvertLongToString"/>
+	<Converters:ConvertLongToString x:Key="ConvertLongToString1"/>
 
 	<!-- Resource dictionary entries should be defined here. -->	
 	<Color x:Key="MainWindowBackgroundColor">White</Color>
@@ -30,8 +29,8 @@
 					<ColumnDefinition Width="5" MaxWidth="5"/>
 					<ColumnDefinition Width="290*"/>
 				</Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding DeviceNumber, Mode=OneWay, NotifyOnSourceUpdated=True}" />
-                <TextBlock Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding FriendlyName, Mode=OneWay, NotifyOnSourceUpdated=True}" />
+				<TextBlock Grid.Column="0" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding DeviceNumber, Mode=OneWay, NotifyOnSourceUpdated=True}" />
+				<TextBlock Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding FriendlyName, Mode=OneWay, NotifyOnSourceUpdated=True}" />
 			</Grid>
 			<Grid Grid.Row="1" Margin="50,5,0,0">
 				<Grid.RowDefinitions>
@@ -44,37 +43,37 @@
 					<ColumnDefinition MinWidth="10" Width="10"/>
 					<ColumnDefinition Width="180*"/>
 				</Grid.ColumnDefinitions>
-                <TextBlock TextWrapping="Wrap" Height="Auto" Width="Auto" VerticalAlignment="Center" Text="Sectors count" />
-                <TextBlock Grid.Column="2" Grid.Row="0" TextWrapping="Wrap" Height="Auto" Width="Auto" VerticalAlignment="Center" Text="{Binding SectorsCount, Converter={StaticResource ConvertLongToString}, Mode=OneWay, NotifyOnSourceUpdated=True}" />
-                <TextBlock TextWrapping="Wrap" Height="Auto" Width="Auto" VerticalAlignment="Center" Text="Size" Grid.Row="2" />
-                <TextBlock Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" Height="Auto" Width="Auto" VerticalAlignment="Center" Text="{Binding DiskSize, Converter={StaticResource ConvertLongToString}, Mode=OneWay, NotifyOnSourceUpdated=True, StringFormat=\{0:D\} bytes}" />
+				<TextBlock TextWrapping="Wrap" Height="Auto" Width="Auto" VerticalAlignment="Center" Text="Sectors count" />
+				<TextBlock Grid.Column="2" Grid.Row="0" TextWrapping="Wrap" Height="Auto" Width="Auto" VerticalAlignment="Center" Text="{Binding SectorsCount, Converter={StaticResource ConvertLongToString1}, Mode=OneWay, NotifyOnSourceUpdated=True}" />
+				<TextBlock TextWrapping="Wrap" Height="Auto" Width="Auto" VerticalAlignment="Center" Text="Size" Grid.Row="2" />
+				<TextBlock Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" Height="Auto" Width="Auto" VerticalAlignment="Center" Text="{Binding DiskSize, Converter={StaticResource ConvertLongToString1}, Mode=OneWay, NotifyOnSourceUpdated=True, StringFormat=\{0:D\} bytes}" />
 			</Grid>
 		</Grid>
 	</DataTemplate>
 
 	<!-- Metro-style waiting animation -->	
 	<SolidColorBrush x:Key = "ParticleColor" Color = "#006699"/>
-    <SolidColorBrush x:Key = "ParticleBackgroundColor" Color = "Transparent"/>
-    <system:Double x:Key = "ParticleOpacity">1</system:Double>
-    <system:Double x:Key = "StartingPointX">0</system:Double>
-    <system:Double x:Key = "StartingPointY">-20</system:Double>
-    <Style x:Key = "EllipseStyle" TargetType = "{x:Type Ellipse}">
-        <Setter Property = "Width" Value = "5"/>
-        <Setter Property = "Height" Value = "5"/>
-        <Setter Property = "Fill" Value = "{StaticResource ParticleColor}"/>
-        <Setter Property = "RenderTransformOrigin" Value = "0.5, 0.5"/>
-        <Setter Property = "Opacity" Value = "1"/>
-    </Style>
+	<SolidColorBrush x:Key = "ParticleBackgroundColor" Color = "Transparent"/>
+	<system:Double x:Key = "ParticleOpacity">1</system:Double>
+	<system:Double x:Key = "StartingPointX">0</system:Double>
+	<system:Double x:Key = "StartingPointY">-20</system:Double>
+	<Style x:Key = "EllipseStyle" TargetType = "{x:Type Ellipse}">
+		<Setter Property = "Width" Value = "5"/>
+		<Setter Property = "Height" Value = "5"/>
+		<Setter Property = "Fill" Value = "{StaticResource ParticleColor}"/>
+		<Setter Property = "RenderTransformOrigin" Value = "0.5, 0.5"/>
+		<Setter Property = "Opacity" Value = "1"/>
+	</Style>
 
-    <Color x:Key="AccentColor">#3399ff</Color>
-    <Color x:Key="AccentLightColor">#7fbfff</Color>
-    <SolidColorBrush x:Key="Accent" Color="{DynamicResource AccentColor}" />
-    <SolidColorBrush x:Key="AccentLight" Color="{DynamicResource AccentLightColor}" />
+	<Color x:Key="AccentColor">#3399ff</Color>
+	<Color x:Key="AccentLightColor">#7fbfff</Color>
+	<SolidColorBrush x:Key="Accent" Color="{DynamicResource AccentColor}" />
+	<SolidColorBrush x:Key="AccentLight" Color="{DynamicResource AccentLightColor}" />
 
 	<LinearGradientBrush x:Key="WindowHeaderGradient" StartPoint="0, 0" EndPoint="0, 1" Opacity=".1">
-        <GradientStop Offset="0" Color="{DynamicResource AccentColor}" />
-        <GradientStop Offset=".3" Color="{DynamicResource AccentColor}" />
-        <GradientStop Offset="1" Color="Transparent" />
-    </LinearGradientBrush>
+		<GradientStop Offset="0" Color="{DynamicResource AccentColor}" />
+		<GradientStop Offset=".3" Color="{DynamicResource AccentColor}" />
+		<GradientStop Offset="1" Color="Transparent" />
+	</LinearGradientBrush>
 
 </ResourceDictionary>

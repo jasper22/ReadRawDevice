@@ -13,12 +13,14 @@ namespace ReadRawDevice.Win32
         /// <summary>
         /// <see cref="DRIVE_LAYOUT_INFORMATION_MBR"/>
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Struct declaration")]
         [FieldOffset(0)]
         public DRIVE_LAYOUT_INFORMATION_MBR Mbr;
 
         /// <summary>
         /// <see cref="DRIVE_LAYOUT_INFORMATION_GPT"/>
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Struct declaration")]
         [FieldOffset(0)]
         public DRIVE_LAYOUT_INFORMATION_GPT Gpt;
     }

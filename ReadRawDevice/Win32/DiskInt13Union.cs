@@ -9,13 +9,13 @@ namespace ReadRawDevice.Win32
     internal struct DiskInt13Union
     {
         /// <summary>
-        /// <see cref="DISK_INT13_INFO"/> for memeber description
+        /// <see cref="DISK_INT13_INFO"/> for member description
         /// </summary>
         [FieldOffset(0)]
         public DISK_INT13_INFO Int13;
 
         /// <summary>
-        /// <see cref="DISK_EX_INT13_INFO"/> for memeber description
+        /// <see cref="DISK_EX_INT13_INFO"/> for member description
         /// </summary>
         [FieldOffset(0)]
         public DISK_EX_INT13_INFO ExInt13;

@@ -137,7 +137,7 @@ namespace ReadRawDevice.Win32
         /// <returns>If the function succeeds, the return value is an open handle to the specified file, device, named pipe, or mail slot. 
         /// If the function fails, the return value is INVALID_HANDLE_VALUE. To get extended error information, call GetLastError.</returns>
         /// <remarks>MSDN: http://msdn.microsoft.com/en-us/library/windows/desktop/aa363858(v=vs.85).aspx </remarks>
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto, EntryPoint = "CreateFile", CallingConvention = CallingConvention.StdCall)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto, EntryPoint = "CreateFile", CallingConvention = CallingConvention.StdCall, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         internal static extern IntPtr CreateFile(string FileName, 
                                                         uint DesiredAccess, 
                                                         uint ShareMode, 
@@ -170,7 +170,7 @@ namespace ReadRawDevice.Win32
                                             byte[] lpBuffer,
                                             uint nNumberOfBytesToRead,
                                             ref uint lpNumberOfBytesRead,
-                                            IntPtr lpOverlapped);
+                                            ref NativeOverlapped lpOverlapped);
 
         /// <summary>
         /// Closes an open object handle.

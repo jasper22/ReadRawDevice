@@ -13,6 +13,13 @@ namespace ReadRawDevice.Win32
     internal class SetupDiGetDeviceProperty
     {
         /// <summary>
+        /// Prevents a default instance of the <see cref="SetupDiGetDeviceProperty"/> class from being created.
+        /// </summary>
+        private SetupDiGetDeviceProperty()
+        {
+        }
+
+        /// <summary>
         /// Gets the property for SetupDiXXX function
         /// </summary>
         /// <param name="deviceHandle">The device handle.</param>

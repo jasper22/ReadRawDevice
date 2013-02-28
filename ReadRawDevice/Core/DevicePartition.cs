@@ -29,9 +29,9 @@ namespace ReadRawDevice.Core
                     break;
                 case PARTITION_STYLE.PARTITION_STYLE_GPT:
                     this.Name = partititonInformation.DriveLayoutInformaiton.Gpt.Name;
-                    this.GPTId = partititonInformation.DriveLayoutInformaiton.Gpt.PartitionId;
-                    this.GPTPartitionType = partititonInformation.DriveLayoutInformaiton.Gpt.PartitionType;
-                    this.GPTAttributes = Convert.ToInt64(partititonInformation.DriveLayoutInformaiton.Gpt.Attributes);
+                    this.GptId = partititonInformation.DriveLayoutInformaiton.Gpt.PartitionId;
+                    this.GptPartitionType = partititonInformation.DriveLayoutInformaiton.Gpt.PartitionType;
+                    this.GptAttributes = Convert.ToInt64(partititonInformation.DriveLayoutInformaiton.Gpt.Attributes);
                     break;
                 case PARTITION_STYLE.PARTITION_STYLE_RAW:
                     break;
@@ -141,7 +141,8 @@ namespace ReadRawDevice.Core
         /// <value>
         /// The GPT id.
         /// </value>
-        public Guid? GPTId
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpt", Justification = "Name hint")]
+        public Guid? GptId
         {
             get;
             private set;
@@ -153,7 +154,8 @@ namespace ReadRawDevice.Core
         /// <value>
         /// The type of the GPT partition.
         /// </value>
-        public Guid? GPTPartitionType
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpt", Justification = "Name hint")]
+        public Guid? GptPartitionType
         {
             get;
             private set;
@@ -165,7 +167,8 @@ namespace ReadRawDevice.Core
         /// <value>
         /// The GPT attributes.
         /// </value>
-        public long GPTAttributes
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpt", Justification = "Name hint")]
+        public long GptAttributes
         {
             get;
             private set;

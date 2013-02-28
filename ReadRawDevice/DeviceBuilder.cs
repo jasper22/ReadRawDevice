@@ -17,9 +17,6 @@ namespace ReadRawDevice
     /// </summary>
     internal class DeviceBuilder : Native
     {
-        private CancellationToken token = CancellationToken.None;
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviceBuilder"/> class.
         /// </summary>
@@ -36,8 +33,6 @@ namespace ReadRawDevice
         /// <returns>Collection of system devices</returns>
         internal DeviceCollection Build(CancellationToken token)
         {
-            this.token = token;
-
             IEnumerable<SystemDevice> tmpListOfDevices = GetListOfDevices(token);
             List<SystemDevice> listOfDevices = new List<SystemDevice>(tmpListOfDevices);
 
@@ -71,9 +66,10 @@ namespace ReadRawDevice
             Guid aquireGuid = Guid.Empty;
             
             IntPtr deviceHandle = UnsafeNativeMethods.SetupDiGetClassDevs(ref aquireGuid, IntPtr.Zero, IntPtr.Zero, flags);
+            int win32Error = Marshal.GetLastWin32Error();
             if (deviceHandle.ToInt32() == UnsafeNativeMethods.INVALID_HANDLE_VALUE)
             {
-                throw new Win32Exception("Could not execute SetupDi functions", new Win32Exception(Marshal.GetLastWin32Error()));
+                throw new Win32Exception("Could not execute SetupDi functions", new Win32Exception(win32Error));
             }
 
             SP_DEVICE_INTERFACE_DATA spDeviceInterfaceData = new SP_DEVICE_INTERFACE_DATA();
@@ -85,6 +81,8 @@ namespace ReadRawDevice
 
             do
             {
+                token.ThrowIfCancellationRequested();
+
                 functionResult = UnsafeNativeMethods.SetupDiEnumDeviceInterfaces(deviceHandle, IntPtr.Zero, ref classGuid, memberIndex, ref spDeviceInterfaceData);
                 if (functionResult == false)
                 {
@@ -123,10 +121,10 @@ namespace ReadRawDevice
 
                 uint nRequiredSize = 0;
                 uint bufferSize = 200;
-
+                bool success = false;
                 //
                 // Should send twice - first time it's only return the 'nRequiredSize' value (but we already calculated it)
-                bool success = UnsafeNativeMethods.SetupDiGetDeviceInterfaceDetail(deviceHandle, 
+                success = UnsafeNativeMethods.SetupDiGetDeviceInterfaceDetail(deviceHandle, 
                                                                                     ref spDeviceInterfaceData,
                                                                                     ref spDeviceInterfaceDetailedData,
                                                                                     bufferSize, 
@@ -140,18 +138,20 @@ namespace ReadRawDevice
                                                                                 out nRequiredSize,
                                                                                 ref spDevInfoData);
 
-                //if (success == false)
-                //{
+                if (success == false)
+                {
                 //    // Still 'false' after sending twice
                 //    UnsafeNativeMethods.SetupDiDestroyDeviceInfoList(deviceHandle);
                 //    throw new Win32Exception("Could not receive details about device", new Win32Exception(Marshal.GetLastWin32Error()));
-                //}
+                }
 
                 // Device
-                var dev = new SystemDevice(spDeviceInterfaceDetailedData.DevicePath);
-                dev.FriendlyName = SetupDiGetDeviceProperty.GetProperty(deviceHandle, spDevInfoData, SetupDiGetDeviceRegistryPropertyEnum.SPDRP_FRIENDLYNAME);
-                dev.DeviceClass = SetupDiGetDeviceProperty.GetProperty(deviceHandle, spDevInfoData, SetupDiGetDeviceRegistryPropertyEnum.SPDRP_CLASS);
-                listOfDevices.Add(dev);
+                listOfDevices.Add(new SystemDevice(spDeviceInterfaceDetailedData.DevicePath) 
+                {
+                    FriendlyName = SetupDiGetDeviceProperty.GetProperty(deviceHandle, spDevInfoData, SetupDiGetDeviceRegistryPropertyEnum.SPDRP_FRIENDLYNAME),
+                    DeviceClass = SetupDiGetDeviceProperty.GetProperty(deviceHandle, spDevInfoData, SetupDiGetDeviceRegistryPropertyEnum.SPDRP_CLASS)
+                });
+            
 
                 // Next device
                 memberIndex++;

@@ -12,6 +12,13 @@ namespace ReadRawDevice.Gui.ViewModel
         private static ResourceDictionary localizedResource = null;
 
         /// <summary>
+        /// Prevents a default instance of the <see cref="Localization"/> class from being created.
+        /// </summary>
+        private Localization()
+        {
+        }
+
+        /// <summary>
         /// Gets the localized resource.
         /// </summary>
         /// <value>

@@ -55,11 +55,11 @@ namespace ReadRawDevice.Core
                     System.Diagnostics.Trace.WriteLine("[]=== Handle is open for device: " + specialDevicePath);
 
                     unsafeHandle = UnsafeNativeMethods.CreateFile(specialDevicePath,
-                                                        Convert.ToUInt32(FileAccess.GenericRead | FileAccess.GenericWrite),
-                                                        Convert.ToUInt32(FileShare.FILE_SHARE_READ | FileShare.FILE_SHARE_WRITE),
+                                                        Convert.ToUInt32(FileAccess.GenericRead | FileAccess.GenericWrite, System.Globalization.CultureInfo.InvariantCulture),
+                                                        Convert.ToUInt32(FileShare.FILE_SHARE_READ | FileShare.FILE_SHARE_WRITE, System.Globalization.CultureInfo.InvariantCulture),
                                                         IntPtr.Zero,
-                                                        Convert.ToUInt32(CreationDisposition.OpenExisting),
-                                                        Convert.ToUInt32(FileAttributes.Normal),
+                                                        Convert.ToUInt32(CreationDisposition.OpenExisting, System.Globalization.CultureInfo.InvariantCulture),
+                                                        Convert.ToUInt32(FileAttributes.Normal, System.Globalization.CultureInfo.InvariantCulture),
                                                         IntPtr.Zero);
                 }
             }
@@ -117,7 +117,7 @@ namespace ReadRawDevice.Core
         /// other objects. Only unmanaged resources can be disposed.
         /// </summary>
         /// <param name="disposing">If <c>true</c> then method has been called directly by user, otherwise if <c>false</c> called by Framework</param>
-        protected void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {

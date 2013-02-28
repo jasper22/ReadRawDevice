@@ -23,7 +23,7 @@ namespace ReadRawDevice.Win32
                     style = "RAW";
                     break;
                 default:
-                    style = "Unknown 'PARTITION_STYLE'. Raw value: " + ((uint)partitionStyle).ToString();
+                    style = "Unknown 'PARTITION_STYLE'. Raw value: " + ((uint)partitionStyle).ToString(System.Globalization.CultureInfo.InvariantCulture);
                     break;
             }
 
@@ -89,7 +89,7 @@ namespace ReadRawDevice.Win32
                     partType = "Valid NTFT";
                     break;
                 default:
-                    partType = "Unknown partition type. Raw value is: " + ((byte)diskPartitionType).ToString();
+                    partType = "Unknown partition type. Raw value is: " + ((byte)diskPartitionType).ToString(System.Globalization.CultureInfo.InvariantCulture);
                     break;
             }
 

@@ -36,9 +36,9 @@ namespace ReadRawDevice.Gui.ViewModel.Converters
                 return string.Empty;
             }
 
-            Int64 data = Int64.Parse(value.ToString());
+            Int64 data = Int64.Parse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture);
 
-            return data.ToString("#,#");
+            return data.ToString("#,#", System.Globalization.CultureInfo.InvariantCulture);
         }
 
         /// <summary>

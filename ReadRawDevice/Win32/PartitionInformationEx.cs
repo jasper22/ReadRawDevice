@@ -7,7 +7,8 @@ namespace ReadRawDevice.Win32
     /// Contains partition information for standard AT-style master boot record (MBR) and Extensible Firmware Interface (EFI) disks.
     /// </summary>
     /// <remarks>MSDN: http://msdn.microsoft.com/en-us/library/aa365448(v=vs.85).aspx </remarks>
-    [StructLayout(LayoutKind.Explicit)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Portability", "CA1900:ValueTypeFieldsShouldBePortable", MessageId = "Name", Justification = "By design")]
+    [StructLayout(LayoutKind.Explicit), System.CLSCompliant(false)]
     internal struct PARTITION_INFORMATION_EX
     {
         /// <summary>
@@ -38,6 +39,7 @@ namespace ReadRawDevice.Win32
         /// <summary>
         /// If this member is TRUE, the partition is rewritable. The value of this parameter should be set to TRUE.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Must exist")]
         [FieldOffset(28)]
         [MarshalAs(UnmanagedType.U1)]
         public bool RewritePartition;

@@ -15,7 +15,7 @@ namespace ReadRawDevice.Gui.ViewModel
     /// <summary>
     /// Main view-model for main-view
     /// </summary>
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged, IDisposable
     {
         private MainModel mainModel = null;
 
@@ -245,7 +245,7 @@ namespace ReadRawDevice.Gui.ViewModel
         internal async void ExecuteExtractCommand(object parameter)
         {
             this.ViewModelVisualState = VS_STATE_EXTRACT;
-            string fileName = GetOutputFileName();
+            string fileName = MainViewModel.FileName;
             if (string.IsNullOrEmpty(fileName))
             {
                 this.ViewModelVisualState = VS_STATE_NORMAL;
@@ -271,7 +271,7 @@ namespace ReadRawDevice.Gui.ViewModel
             catch (Exception exp_gen)
             {
                 this.ViewModelVisualState = VS_STATE_NORMAL;
-                OnError(exp_gen);
+                OnErrorState(exp_gen);
             }
 
         }
@@ -300,26 +300,28 @@ namespace ReadRawDevice.Gui.ViewModel
         /// Gets the name of the output file.
         /// </summary>
         /// <returns>If user enter any file the full path and file name will be returned, otherwise string.Empty will be returned</returns>
-        protected string GetOutputFileName()
+        protected static string FileName
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            get
             {
-                CheckFileExists = false,
-                CheckPathExists = true,
-                Filter = "Binary file|*.bin|All files|*.*",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                RestoreDirectory = true,
-                Title = Localization.LocalizedResource["OutputFileDialogTitle"].ToString()
-            };
+                SaveFileDialog saveFileDialog = new SaveFileDialog()
+                {
+                    CheckFileExists = false,
+                    CheckPathExists = true,
+                    Filter = "Binary file|*.bin|All files|*.*",
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    RestoreDirectory = true,
+                    Title = Localization.LocalizedResource["OutputFileDialogTitle"].ToString()
+                };
 
-            bool? result = saveFileDialog.ShowDialog();
-            if (result.HasValue == false)
-            {
-                return string.Empty;
+                bool? result = saveFileDialog.ShowDialog();
+                if (result.HasValue == false)
+                {
+                    return string.Empty;
+                }
+
+                return saveFileDialog.FileName;
             }
-
-            return saveFileDialog.FileName;
-
         }
 
         /// <summary>
@@ -392,7 +394,7 @@ namespace ReadRawDevice.Gui.ViewModel
             }
             catch (Exception exp_gen)
             {
-                OnError(exp_gen);
+                OnErrorState(exp_gen);
             }
         }
         #endregion
@@ -452,7 +454,7 @@ namespace ReadRawDevice.Gui.ViewModel
         /// Change VisualState to error and display error message
         /// </summary>
         /// <param name="error">The exception that occurred</param>
-        protected virtual void OnError(Exception error)
+        protected virtual void OnErrorState(Exception error)
         {
             this.ViewModelVisualState = VS_STATE_ERROR;
 
@@ -480,6 +482,34 @@ namespace ReadRawDevice.Gui.ViewModel
                 errorDocument = value;
                 OnPropertyChanged();
             }
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposingManaged"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposingManaged)
+        {
+            if (disposingManaged)
+            {
+                if (tokenSource != null)
+                {
+                    tokenSource.Cancel();
+                    tokenSource.Dispose();
+                    tokenSource = null;
+                }
+            }
+
+            // Unmanaged disposed here
         }
     }
 }

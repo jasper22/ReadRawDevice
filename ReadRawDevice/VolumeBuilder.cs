@@ -14,8 +14,9 @@ namespace ReadRawDevice
     /// </summary>
     internal class VolumeBuilder : Native
     {
-        private CancellationToken token = CancellationToken.None;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VolumeBuilder"/> class.
+        /// </summary>
         internal VolumeBuilder()
             : base()
         {

@@ -8,7 +8,7 @@ namespace ReadRawDevice.Win32
     /// </summary>
     /// <remarks>MSDN: http://msdn.microsoft.com/en-us/library/windows/hardware/ff552610(v=vs.85).aspx </remarks>
     [StructLayout(LayoutKind.Sequential), System.CLSCompliant(false)]
-    public struct DISK_EX_INT13_INFO
+    internal struct DISK_EX_INT13_INFO
     {
         /// <summary>
         /// Indicates the size of the buffer that the caller provides to the BIOS in which to return the requested drive data. 
